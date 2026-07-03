@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <link href="/static/index.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+{% if user in users %}
+  <p id="username"><i>{{ user }}</i></p>
+{% endif %}
+
+<div id="live-message">{% include "message.html" %}</div>
+
+{% if not display %}
+  {% if invalid %}
+  <br><span>Invalid secret code!</span>
+  {% endif %}
+
+  {% if user is none %}
+    <br><span>Enter a secret code to be able to vote:</span>
+    <input id="secret-code" onkeyup="unspace(this)">
+    <button onclick="login()">Go!</button>
+  {% endif %}
+{% endif %}
+
+<div id="active-user">{% include "active_user.html" %}</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/index.js"></script>
+{% endblock %}

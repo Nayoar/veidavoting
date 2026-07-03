@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+  background-color: #003;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+  margin: auto;
+  width: 95%;
+  max-width: 600px;
+}
+
+header {
+  font-size: 22px;
+  text-align: center;
+  margin: 0 0 12px;
+  padding: 4px;
+  border-bottom: 1px solid white;
+}
+
+main {
+  text-align: center;
+}
+
+input, textarea, button {
+  font-family: "Open Sans", sans-serif;
+  background-color: #003;
+  color: white;
+  border: 1px solid white;
+  border-radius: 6px;
+  font-size: 18px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+input[type="submit"], button {
+  cursor: pointer;
+}
+
+input:focus, textarea:focus, input:hover, button:hover {
+  box-shadow: 0 0 8px 2px gold;
+}
+
+input[type="submit"]:active, button:active {
+  transform: translateY(3px);
+}

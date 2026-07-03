@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <link href="/static/admin.css" rel="stylesheet" type="text/css" />
+  <link href="/static/index.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block title %}Veida Admin{% endblock %}
+
+{% block content %}
+
+  <div>
+    <h3>Users</h3>
+    <button onclick="newUser()">New user</button>
+    <span id="new-user"></span><br><br>
+    <input id="toggle-user" onkeyup="unspace(this)">
+    <button onclick="activateUser()">Activate</button>
+    <button onclick="deactivateUser()">Deactivate</button>
+    <span id="confirm-toggle"></span>
+  </div>
+
+  <div>
+    <h3>Message</h3>
+    <textarea id="message" spellcheck="false">{{ message }}</textarea>
+    <button onclick="setNothingMessage()">Set as message</button>
+    <button onclick="setMotion()">Set as motion</button>
+    <span id="message-confirm"></span>
+  </div>
+
+  <div>
+    <h3>Voting</h3>
+    <div id="vote-presets">
+      <button id="suspend-e4" onclick="votePreset(this)">Suspend E4</button>
+      <button id="ratify-steering" onclick="votePreset(this)">Ratify steering</button>
+      <button id="ratify-chair" onclick="votePreset(this)">Ratify chair</button>
+      <button id="move-hanhallah" onclick="votePreset(this)">Move to Hanhallah</button>
+      <button id="amendment" onclick="votePreset(this)">Amendment</button>
+      <button id="parts" onclick="votePreset(this)">Vote in parts</button>
+      <button id="move-to-vote" onclick="votePreset(this)">Move to vote</button>
+      <button id="vote-on-motion" onclick="votePreset(this)">Vote on motion</button>
+    </div><br>
+    Vote duration: <input type="number" id="duration" value=20><br><br>
+    Custom vote: <input id="custom-vote"><button onclick="voteCustom()">Go</button><br><br>
+
+    <button onclick="endVote(true)">End vote</button>
+    <button onclick="endVote(false)">Cancel vote</button>
+    <button onclick="endVote(false)">Clear results</button>
+
+    <br><span id="vote-confirm"></span>
+
+    <div id="live-vote">
+      {% with display=true %}{% include "vote.html" %}{% endwith %}
+    </div>
+  </div>
+  
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/admin.js"></script>
+<script src="/static/index.js"></script>
+{% endblock %}

@@ -1,0 +1,153 @@
+.subtitle {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+#username {
+  color: #666;
+}
+
+#active-user {
+  margin: 20px;
+}
+
+span#message, #vote {
+  display: block;
+  font-size: 24px;
+}
+
+#secret-code {
+  width: 120px;
+}
+
+#timer {
+  width: 60px;
+  height: 60px;
+  margin: 12px auto;
+  border-radius: 50%;
+  font-size: 32px;
+  line-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#seconds {
+  width: 52px;
+  height: 52px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: #003;
+}
+
+#yesno {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.vote-button {
+  width: 120px;
+  height: 120px;
+  font-size: 40px;
+  margin: 16px 8px 8px;
+  border: 2px solid white;
+  border-radius: 12px;
+  line-height: 110px;
+  transition: box-shadow 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+#abstain {
+  width: 260px;
+  height: 48px;
+  font-size: 28px;
+  margin: 8px auto 24px;
+  line-height: 44px;
+}
+
+.vote-button:hover {
+  transform: scale(1.05);
+}
+
+.vote-button.selected {
+  box-shadow: 0 0 8px 2px gold;
+}
+
+#vote-buttons:has(.selected) .vote-button:not(.selected) {
+  opacity: 0.4;
+}
+
+#vote-buttons:not(:has(.selected)) ~ #submit-vote {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#vote-buttons:not(:has(.selected)) ~ #submit-vote:hover {
+  box-shadow: none;
+}
+
+#vote-over {
+  margin: 16px auto;
+}
+
+#vote-over > .subtitle {
+  margin-bottom: 16px;
+}
+
+#vote-submitted {
+  margin: 16px auto;
+}
+
+#vote-submitted > span {
+  font-weight: 800;
+}
+
+#results-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+.votecount {
+  flex-grow: 1;
+}
+
+.votecount > span {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.votecount:first-child { text-align: left; }
+.votecount:last-child { text-align: right; }
+
+#results-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  background-color: #555;
+}
+
+#results-bar div {
+  height: 32px;
+  margin: 0;
+}
+
+#results-bar :first-child {
+  background-color: #1a1;
+  width: calc(var(--yes) / var(--total) * 100%);
+}
+
+#results-bar :nth-child(2) {
+  background-color: #555;
+  width: calc(var(--abstain) / var(--total) * 100%);
+}
+
+#results-bar :last-child {
+  background-color: #900;
+  width: calc(var(--no) / var(--total) * 100%);
+}
+
+#total-voters {
+  margin: 12px;
+}

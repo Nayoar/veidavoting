@@ -1,0 +1,77 @@
+from .. import *
+from ..words import random_phrase
+
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+
+  if request.method == "POST":
+    if request.form.get("password") == "p4ssw0rd":
+      session["admin"] = "true"
+    return redirect(request.url)
+
+  if "admin" not in session:
+    return render_template("admin_login.html")
+  
+  return render_template("admin.html")
+
+
+@app.route("/admin/update", methods=["POST"])
+def update_message():
+
+  if "admin" not in session:
+    abort(401)
+
+  data = request.get_json()
+  
+  if "message" in data:
+    db.db["mode"] = data.get("mode", "nothing")
+    db.db["message"] = data["message"]
+    turbo.push(turbo.update(render_template("message.html"), "live-message"))
+
+  if "activate" in data:
+    user = data["activate"]
+    if user not in db.db["users"]:
+      abort(400)
+    db.db["users"][user] = True
+    if turbo.can_push(to=user):
+      turbo.push(
+        turbo.update(
+          render_template("active_user.html", user=user),
+          "active-user"
+        ),
+        to=user
+      )
+
+  if "deactivate" in data:
+    user = data["deactivate"]
+    if user not in db.db["users"]:
+      abort(400)
+    db.db["users"][user] = False
+    if turbo.can_push(to=user):
+      turbo.push(
+        turbo.update(
+          render_template("active_user.html", user=user),
+          "active-user"
+        ),
+        to=user
+      )
+  db.save()
+
+  return "ok"
+
+
+@app.route("/admin/new-user", methods=["POST"])
+def new_user():
+
+  if "admin" not in session:
+    abort(401)
+
+  new_user = random_phrase(db.db["users"])
+  if new_user is None:
+    abort(500)
+  
+  db.db["users"][new_user] = None
+  db.save()
+
+  return new_user

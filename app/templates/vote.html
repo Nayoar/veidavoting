@@ -1,0 +1,87 @@
+{% if vote_active %}
+
+  <span class="subtitle">Current vote:</span>
+  <span id="vote"
+    data-start="{{ votes[-1]['start'] }}"
+    data-end="{{ votes[-1]['end'] }}"
+  >{{ votes[-1]["vote_text"] }}</span>
+
+  {% if now < votes[-1]["end"] %}
+  <div id="voting-interface">
+    <div id="timer"><div id="seconds"></div></div>
+
+    <div style="display:var(--active);">
+      <div id="vote-buttons">
+        <div id="yesno">
+          <div class="vote-button" id="vote-yes" onclick="vote(this)">Yes</div>
+          <div class="vote-button" id="vote-no" onclick="vote(this)">No</div>
+        </div>
+        <div class="vote-button" id="abstain" onclick="vote(this)">Abstain</div>
+      </div>
+      
+      <button id="submit-vote" onclick="submitVote()">Submit vote</button>
+
+      <p id="vote-warning"><i>You must press "Submit vote" before the timer ends. If you do not submit your vote, it will not be counted.</i></p>
+
+      <p id="vote-submitted" style="display:none;">
+        You have voted <span></span>
+        <!-- <span style="display:var(--Yes)">Yes</span>
+        <span style="display:var(--Abstain)">Abstain</span>
+        <span style="display:var(--No)">No</span> -->
+      </p>
+    </div>
+
+    <div style="display:var(--inactive);">
+      <p><i>You are currently unable to vote</i></p>
+    </div>
+
+    <p id="error" style="display:none;">Error :(</p>
+  </div>
+
+  <div id="vote-over" style="display:none;">
+    <span class="subtitle">Vote has ended!</span>
+  </div>
+
+  {% else %}
+
+  <div id="vote-over">
+    <span class="subtitle">Vote has ended!</span>
+    <div id="results"
+      style="
+        --yes: {{ yes }};
+        --abstain: {{ abstain }};
+        --no: {{ no }};
+        --total: {{ total }};
+      "
+    >
+      <div id="results-text">
+        <span class="votecount">Yes<br><span>
+          {{ yes }}<br>
+          {% if total > 0 %} {{ (100*yes/total) | int }}% {% endif %}
+        </span></span>
+        <span class="votecount">Abstain<br><span>
+          {{ abstain }}<br>
+          {% if total > 0 %} {{ (100*abstain/total) | int }}% {% endif %}
+        </span></span>
+        <span class="votecount">No<br><span>
+          {{ no }}<br>
+          {% if total > 0 %} {{ (100*no/total) | int }}% {% endif %}
+        </span></span>
+      </div>
+      <div id="results-bar">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p id="total-voters"><i>
+        {{ total_voters }} active voters, {{ total }} voted
+      </i></p>
+      
+    </div>
+  </div>
+
+  {% endif %}
+
+{% else %}
+  <p><i>No vote currently taking place</i></p>
+{% endif %}
