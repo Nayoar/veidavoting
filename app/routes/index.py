@@ -17,6 +17,8 @@ def index():
       session.pop("user")
 
   user = get_id()
+  if user == "admin":
+    user = None
   if user in DB.users and DB.users[user] is None:
     DB.users[user] = True
   return render_template(
