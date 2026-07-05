@@ -221,6 +221,5 @@ __marimo__/
 
 
 .env
-app/db.json
 app/__pycache__
 app/routes/__pycache__

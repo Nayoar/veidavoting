@@ -3,8 +3,7 @@ from flask import abort, Flask, jsonify, redirect, render_template, request, ses
 import os
 from turbo_flask import Turbo
 
-from . import db
-db.load()
+from .db import DB
 
 now = lambda: int(datetime.now().timestamp() * 1000)
 
@@ -17,14 +16,14 @@ from . import routes
 @app.context_processor
 def inject_db():
   
-  context = {**db.db, "now": now()}
+  context = {**DB, "now": now()}
 
-  if len(db.db["votes"]) > 0:
-    votes = list(db.db["votes"][-1]["votes"].values())
+  if len(DB.votes) > 0:
+    votes = list(DB.votes[-1]["votes"].values())
     context["yes"] = votes.count("Yes")
     context["no"] = votes.count("No")
     context["abstain"] = votes.count("Abstain")
     context["total"] = len(votes)
-    context["total_voters"] = list(db.db["users"].values()).count(True)
+    context["total_voters"] = list(DB.users.values()).count(True)
 
   return context

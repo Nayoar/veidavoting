@@ -25,15 +25,15 @@ def update_message():
   data = request.get_json()
   
   if "message" in data:
-    db.db["mode"] = data.get("mode", "nothing")
-    db.db["message"] = data["message"]
+    DB.mode = data.get("mode", "nothing")
+    DB.message = data["message"]
     turbo.push(turbo.update(render_template("message.html"), "live-message"))
 
   if "activate" in data:
     user = data["activate"]
-    if user not in db.db["users"]:
+    if user not in DB.users:
       abort(400)
-    db.db["users"][user] = True
+    DB.users[user] = True
     if turbo.can_push(to=user):
       turbo.push(
         turbo.update(
@@ -45,9 +45,9 @@ def update_message():
 
   if "deactivate" in data:
     user = data["deactivate"]
-    if user not in db.db["users"]:
+    if user not in DB.users:
       abort(400)
-    db.db["users"][user] = False
+    DB.users[user] = False
     if turbo.can_push(to=user):
       turbo.push(
         turbo.update(
@@ -56,7 +56,6 @@ def update_message():
         ),
         to=user
       )
-  db.save()
 
   return "ok"
 
@@ -67,11 +66,10 @@ def new_user():
   if "admin" not in session:
     abort(401)
 
-  new_user = random_phrase(db.db["users"])
+  new_user = random_phrase(DB.users)
   if new_user is None:
     abort(500)
   
-  db.db["users"][new_user] = None
-  db.save()
+  DB.users[new_user] = None
 
   return new_user

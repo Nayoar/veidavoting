@@ -17,13 +17,12 @@ def index():
       session.pop("user")
 
   user = get_id()
-  if user in db.db["users"] and db.db["users"][user] is None:
-    db.db["users"][user] = True
-    db.save()
+  if user in DB.users and DB.users[user] is None:
+    DB.users[user] = True
   return render_template(
     "index.html",
-    user = user if user in db.db["users"] else None,
-    invalid = user is not None and user not in db.db["users"]
+    user = user if user in DB.users else None,
+    invalid = user is not None and user not in DB.users
   )
 
 
@@ -39,18 +38,18 @@ def post_vote():
     user = list(request.args.keys())[0]
   else:
     abort(401)
-  if user not in db.db["users"] or not db.db["users"]:
+  if user not in DB.users or not DB.users:
     abort(401)
 
-  if user in db.db["votes"][-1]["votes"]:
+  if user in DB.votes[-1]["votes"]:
     abort(400)
-  if now() > db.db["votes"][-1]["end"] + 2000:
+  if now() > DB.votes[-1]["end"] + 2000:
     abort(400)
 
   choice = request.get_json()
   if choice not in ["Yes", "No", "Abstain"]:
     abort(400)
 
-  db.db["votes"][-1]["votes"][user] = choice
+  DB.votes[-1]["votes"][user] = choice
 
   return "ok"

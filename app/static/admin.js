@@ -25,7 +25,10 @@ const newUser = () => {
     {method: "POST"}
   )
   .then(r => r.text())
-  .then(t => $("#new-user").html(t))
+  .then(t => {
+    $("#new-user").html(t);
+    $("#userlist").append(`<option value="${t}">`);
+})
 }
 
 const activateUser = () => {

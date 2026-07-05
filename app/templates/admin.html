@@ -9,11 +9,17 @@
 
 {% block content %}
 
+  <datalist id="userlist">
+    {% for user in users %}
+      <option value="{{ user }}">
+    {% endfor %}
+  </datalist>
+
   <div>
     <h3>Users</h3>
     <button onclick="newUser()">New user</button>
     <span id="new-user"></span><br><br>
-    <input id="toggle-user" onkeyup="unspace(this)">
+    <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
     <button onclick="activateUser()">Activate</button>
     <button onclick="deactivateUser()">Deactivate</button>
     <span id="confirm-toggle"></span>

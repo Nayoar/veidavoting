@@ -19,7 +19,7 @@
 
   {% if user is none %}
     <br><span>Enter a secret code to be able to vote:</span>
-    <input id="secret-code" onkeyup="unspace(this)">
+    <input id="secret-code" autocomplete="off" onkeyup="unspace(this)">
     <button onclick="login()">Go!</button>
   {% endif %}
 {% endif %}
