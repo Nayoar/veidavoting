@@ -10,6 +10,8 @@ now = lambda: int(datetime.now().timestamp() * 1000)
 app = Flask(__name__)
 turbo = Turbo(app)
 app.secret_key = os.getenv("SECRET_KEY")
+app.config["PREFERRED_URL_SCHEME"] = "https"
+app.config["SESSION_COOKIE_SECURE"] = True
 
 from . import routes
 
