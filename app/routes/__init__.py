@@ -1,1 +1,1 @@
-from . import admin, index, voting
+from . import admin, index, ping, voting
