@@ -6,14 +6,19 @@ from ..words import random_phrase
 def admin():
 
   if request.method == "POST":
-    if request.form.get("password") == "p4ssw0rd":
-      session["admin"] = "true"
-    return redirect(request.url)
+    return redirect("/?admin", code=307)
 
   if "admin" not in session:
     return render_template("admin_login.html")
   
   return render_template("admin.html")
+
+
+@app.route("/admin-login", methods=["POST"])
+def admin_login():
+  if request.form.get("password") == "p4ssw0rd":
+    session["admin"] = "true"
+  return redirect("/admin", code=303)
 
 
 @app.route("/admin/update", methods=["POST"])

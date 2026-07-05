@@ -10,7 +10,7 @@
 {% block content %}
 
   <datalist id="userlist">
-    {% for user in users %}
+    {% for user in users if user != "admin" %}
       <option value="{{ user }}">
     {% endfor %}
   </datalist>
@@ -54,8 +54,13 @@
 
     <br><span id="vote-confirm"></span>
 
-    <div id="live-vote">
-      {% with display=true %}{% include "vote.html" %}{% endwith %}
+    <div id="live-vote" style="
+    --active: block;
+    --inactive: none;
+    --interface: block;
+    --voted: none;
+    ">
+      {% include "vote.html" %}
     </div>
   </div>
   
