@@ -57,15 +57,15 @@
       <div id="results-text">
         <span class="votecount">Yes<br><span>
           {{ yes }}<br>
-          {% if total > 0 %} {{ (100*yes/total) | int }}% {% endif %}
+          {% if total > 0 %} {{ ((100*yes/total) | round) | int }}% {% endif %}
         </span></span>
         <span class="votecount">Abstain<br><span>
           {{ abstain }}<br>
-          {% if total > 0 %} {{ (100*abstain/total) | int }}% {% endif %}
+          {% if total > 0 %} {{ ((100*abstain/total) | round) | int }}% {% endif %}
         </span></span>
         <span class="votecount">No<br><span>
           {{ no }}<br>
-          {% if total > 0 %} {{ (100*no/total) | int }}% {% endif %}
+          {% if total > 0 %} {{ ((100*no/total) | round) | int }}% {% endif %}
         </span></span>
       </div>
       <div id="results-bar">
