@@ -18,7 +18,7 @@ def index():
 
   user = get_id()
   if user == "admin":
-    user = None
+    user = "congrats you found an easter egg"
   if user in DB.users and DB.users[user] is None:
     DB.users[user] = True
   return render_template(
