@@ -1,4 +1,9 @@
-const unspace = e => e.value = e.value.replace(" ", "-");
+const unspace = e => e.val(e.val().replace(" ", "-"))
+
+$("#secret-code").on("keyup", e => {
+  if (e.key === "Enter" || e.keyCode === 13) login();
+  else unspace($("#secret-code"));
+})
 
 const login = () => window.location.href = "?" + $("#secret-code").val();
 
