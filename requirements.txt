@@ -1,4 +1,5 @@
 flask
+gunicorn
 turbo-flask
 pymongo
 python-dotenv
