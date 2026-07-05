@@ -4,13 +4,9 @@
 
 {% block content %}
 
-<form method="POST" id="admin-login">
+<form method="POST" data-turbo="false">
   <input type="password" name="password">
   <input type="submit" value="Login">
 </form>
-
-<script>
-  document.getElementById("admin-login").action = location.href;
-</script>
 
 {% endblock %}

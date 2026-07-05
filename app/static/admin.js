@@ -1,5 +1,5 @@
 const sendUpdate = (data, outID) => {
-  fetch(location.href + "/admin/update",
+  fetch("/admin/update",
     {
       method: "POST",
       headers: {
@@ -21,7 +21,7 @@ const sendUpdate = (data, outID) => {
 }
 
 const newUser = () => {
-  fetch(location.href + "/admin/new-user",
+  fetch("/admin/new-user",
     {method: "POST"}
   )
   .then(r => r.text())
@@ -70,7 +70,7 @@ const presets = {
 
 const startVote = text => {
   let duration = parseInt($("#duration").val());
-  fetch(location.href + "/admin/start-vote",
+  fetch("/admin/start-vote",
     {
       method: "POST",
       headers: {
@@ -99,7 +99,7 @@ const voteCustom = () => {
 }
 
 const endVote = a => {
-  fetch(location.href + (a ? "/admin/end-vote" : "/admin/cancel-vote"),
+  fetch(a ? "/admin/end-vote" : "/admin/cancel-vote",
     {
       method: "POST",
       headers: {

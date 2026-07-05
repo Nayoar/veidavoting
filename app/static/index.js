@@ -5,7 +5,7 @@ $("#secret-code").on("keyup", e => {
   else unspace($("#secret-code"));
 })
 
-const login = () => window.location.href = "?" + $("#secret-code").val();
+const login = () => "?" + $("#secret-code").val();
 
 const vote = e => {
   if ($(e).hasClass("selected")) {
@@ -24,7 +24,7 @@ const submitVote = () => {
     "vote-no": "No",
     "abstain": "Abstain"
   }[selected.id];
-  fetch(window.location.href,
+  fetch(location.href,
     {
       method: "POST",
       headers: {
