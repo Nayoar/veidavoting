@@ -36,7 +36,7 @@ def update_message():
 
   if "activate" in data:
     user = data["activate"]
-    if user not in DB.users:
+    if user not in DB.users or user == "admin":
       abort(400)
     DB.users[user] = True
     if turbo.can_push(to=user):
@@ -50,7 +50,7 @@ def update_message():
 
   if "deactivate" in data:
     user = data["deactivate"]
-    if user not in DB.users:
+    if user not in DB.users or user == "admin":
       abort(400)
     DB.users[user] = False
     if turbo.can_push(to=user):

@@ -13,8 +13,10 @@
       --duration: {{ (votes[-1]['end'] - now) / 1000 }}s;
     "><div id="seconds"></div></div>
 
-    <div style="display:var(--active);">
-      <div id="vote-buttons">
+    <div style="display: var(--active);">
+      <div id="vote-buttons" 
+        {% if voted %} style="display: none;" {% endif %}
+      >
         <div id="yesno">
           <div class="vote-button" id="vote-yes" onclick="vote(this)">Yes</div>
           <div class="vote-button" id="vote-no" onclick="vote(this)">No</div>
@@ -22,24 +24,30 @@
         <div class="vote-button" id="abstain" onclick="vote(this)">Abstain</div>
       </div>
       
-      <button id="submit-vote" onclick="submitVote()">Submit vote</button>
+      <button id="submit-vote" onclick="submitVote()"
+        {% if voted %} style="display: none;" {% endif %}
+      >Submit vote</button>
 
-      <p id="vote-submitted" style="display:none;">
-        You have voted <span></span>
-        <!-- <span style="display:var(--Yes)">Yes</span>
-        <span style="display:var(--Abstain)">Abstain</span>
-        <span style="display:var(--No)">No</span> -->
+      <p id="vote-warning"
+        {% if voted %} style="display: none;" {% endif %}
+      ><i>You must press "Submit vote" before the timer ends. If you do not submit your vote, it will not be counted.</i></p>
+
+      <p id="vote-submitted"
+        {% if voted %} style="display: block;"
+        {% else %} style="display: none;" {% endif %}
+      >
+        You have voted <span id="vote-choice">{{ choice }}</span>
       </p>
     </div>
 
-    <div style="display:var(--inactive);">
+    <div style="display: var(--inactive);">
       <p><i>You are currently unable to vote</i></p>
     </div>
 
-    <p id="error" style="display:none;">Error :(</p>
+    <p id="error" style="display: none;">Error :(</p>
   </div>
 
-  <div id="vote-over" style="display:none;">
+  <div id="vote-over" style="display: none;">
     <span class="subtitle">Vote has ended!</span>
   </div>
 

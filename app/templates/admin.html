@@ -54,14 +54,17 @@
 
     <br><span id="vote-confirm"></span>
 
-    <div id="live-vote" style="
+    {# <div id="live-vote" style="
     --active: block;
     --inactive: none;
     --interface: block;
     --voted: none;
     ">
       {% include "vote.html" %}
-    </div>
+    </div> #}
+    <div id="active-user">{% with user="admin" %}
+      {% include "active_user.html" %}
+    {% endwith %}</div>
   </div>
   
 

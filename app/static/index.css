@@ -24,7 +24,7 @@ span#message, #vote {
 @property --a {
   syntax: "<angle>";
   inherits: false;
-  initial-value: 360deg;
+  initial-value: 0deg;
 }
 
 #timer {

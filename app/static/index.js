@@ -17,6 +17,9 @@ const vote = e => {
   } else {
     $(".vote-button").removeClass("selected");
     $(e).addClass("selected");
+    $([document.documentElement, document.body]).animate({
+      scrollTop: $("#vote-warning").offset().top
+    }, 500);
   }
 }
 
@@ -41,8 +44,9 @@ const submitVote = () => {
   .then(r => {
     if (r.status == 200) {
       $("#vote-buttons, #submit-vote, #vote-warning").hide();
-      $("#vote-submitted > span").html(choice);
-      $("#vote-submitted").show()
+      $("#vote-choice").html(choice);
+      // $("#live-vote").css(`--${choice}`, "inline");
+      $("#vote-submitted").show();
     } else {
       $("#error").show();
     }
