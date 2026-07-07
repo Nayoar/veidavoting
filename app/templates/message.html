@@ -1,4 +1,4 @@
 {% if mode=="motion" %}
   <span class="subtitle">Current motion:</span>
 {% endif %}
-<span id="message">{{ message }}</span>
+<span id="message">{{ message | safe }}</span>
