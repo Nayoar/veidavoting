@@ -55,25 +55,9 @@ setInterval(() => {
   let end = currentVote.attr("data-end");
   let now = Date.now();
   if (now < end) {
-    let remaining = Math.floor((end - now) / 1000);
-    $("#seconds").html(remaining);
-    let angle = 360 * (end - now) / (end - start);
-    $("#timer").css(
-      "background-image",
-      `conic-gradient(white 0deg, white ${angle}deg, transparent ${angle}deg)`
-    );
+    $("#seconds").html(Math.floor((end - now) / 1000));
   } else {
     $("#voting-interface").hide();
     $("#vote-over").show()
   }
-}, 50);
-
-
-// setInterval(() => {
-//   fetch("/ping")
-//   .then(r => r.json())
-//   .then(j => {
-//     console.log(j);
-//     if (!j) window.location.reload();
-//   })
-// }, 10000)
+}, 200);

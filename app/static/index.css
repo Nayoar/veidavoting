@@ -21,6 +21,12 @@ span#message, #vote {
   width: 120px;
 }
 
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
 #timer {
   width: 60px;
   height: 60px;
@@ -31,6 +37,18 @@ span#message, #vote {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  --a: 0deg;
+  background-image: conic-gradient(
+    white 0deg,
+    white var(--a),
+    transparent var(--a)
+  );
+  animation: timer var(--duration) linear;
+}
+
+@keyframes timer {
+  0% { --a: var(--initial-angle); }
+  100% { --a: 0deg; }
 }
 
 #seconds {
@@ -86,6 +104,15 @@ span#message, #vote {
 
 #vote-buttons:not(:has(.selected)) ~ #submit-vote:hover {
   box-shadow: none;
+}
+
+#vote-buttons:has(.selected) ~ #submit-vote {
+  animation: pulse 0.7s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 #vote-over {
