@@ -21,11 +21,12 @@ def index():
     user = "congrats you found an easter egg"
   if user in DB.users and DB.users[user] is None:
     DB.users[user] = True
+  invalid = user is not None and user not in DB.users
   return render_template(
     "index.html",
     user = user if user in DB.users else None,
-    invalid = user is not None and user not in DB.users
-  )
+    invalid = invalid
+  ), 401 if invalid else 200
 
 
 @app.route("/display")

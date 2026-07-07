@@ -5,7 +5,11 @@ $("#secret-code").on("keyup", e => {
   else unspace($("#secret-code"));
 })
 
-const login = () => location.href = "?" + $("#secret-code").val();
+const login = () => {
+  let username = $("#secret-code").val();
+  if (username == "admin") location.href = "/admin";
+  else location.href = "?" + username;
+}
 
 const vote = e => {
   if ($(e).hasClass("selected")) {
