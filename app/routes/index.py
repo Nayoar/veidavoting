@@ -1,5 +1,8 @@
 from .. import *
 
+def clean(user):
+  return user.lower().strip("-")
+
 def get_id():
   return session.get("user")
 
@@ -11,7 +14,7 @@ def get_user_id():
 def index():
 
   if len(request.args) > 0:
-    session["user"] = list(request.args.keys())[0]
+    session["user"] = clean(list(request.args.keys())[0])
   else:
     if "user" in session:
       session.pop("user")
@@ -38,7 +41,7 @@ def display():
 def post_vote():
 
   if len(request.args) > 0:
-    user = list(request.args.keys())[0]
+    user = clean(list(request.args.keys())[0])
   else:
     abort(401)
   if user not in DB.users \
