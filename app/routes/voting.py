@@ -8,10 +8,7 @@ def start_vote():
 
   if "admin" not in session:
     abort(401)
-
-  if DB.vote_active:
-    abort(400)
-
+    
   data = request.get_json()
 
   start = now()
