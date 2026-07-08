@@ -54,7 +54,18 @@
   {% else %}
 
   <div id="vote-over">
-    <span class="subtitle">Vote has ended!</span>
+    <span class="subtitle">Vote has
+      {% if (votes[-1]["mode"] == "motion" and yes > no)
+        or (votes[-1]["mode"] == "constitutional" and yes > 2 * no) %}
+        <span id="passed">PASSED</span>
+      {% elif votes[-1]["mode"] == "motion"
+        or votes[-1]["mode"] == "constitutional" %}
+        <span id="failed">FAILED</span>
+      {% else %}
+        <span>ended!</span>
+      {% endif %}
+    </span>
+
     <div id="results"
       style="
         --yes: {{ yes }};

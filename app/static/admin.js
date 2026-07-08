@@ -43,16 +43,9 @@ const deactivateUser = () => {
   }, "confirm-toggle");
 }
 
-const setNothingMessage = () => {
+const setMessage = m => {
   sendUpdate({
-    mode: "none",
-    message: $("#message").val()
-  }, "message-confirm");
-}
-
-const setMotion = () => {
-  sendUpdate({
-    mode: "motion",
+    mode: m,
     message: $("#message").val()
   }, "message-confirm");
 }

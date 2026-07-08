@@ -131,6 +131,16 @@ span#message, #vote {
   font-weight: 800;
 }
 
+#passed {
+  color: #1a1;
+  font-size: 24px;
+}
+
+#failed {
+  color: #900;
+  font-size: 24px;
+}
+
 #results-text {
   display: flex;
   justify-content: space-between;

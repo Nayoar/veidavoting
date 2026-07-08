@@ -21,6 +21,7 @@ def start_vote():
     "start": start,
     "end": start + duration * 1000,
     "message": DB.message,
+    "mode": DB.mode,
     "vote_text": data.get("text", ""),
     "votes": {}
   })

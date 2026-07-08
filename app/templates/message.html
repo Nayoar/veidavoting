@@ -1,4 +1,17 @@
-{% if mode=="motion" %}
+{% if mode == "motion" or mode == "constitutional" %}
   <span class="subtitle">Current motion:</span>
 {% endif %}
-<span id="message">{{ message | safe }}</span>
+
+<span id="message"
+  {% if message | length > 600 %}
+    style="font-size: 18px;"
+  {% elif message | length > 300 %}
+    style="font-size: 21px;"
+  {% endif %}
+>{{ message | safe }}</span>
+
+{% if mode == "constitutional" %}
+  <p><i>
+    Constitutional amendments require a two-thirds majority
+  </i></p>
+{% endif %}
