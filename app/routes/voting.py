@@ -3,6 +3,18 @@ import time
 from .. import *
 
 
+def show_results():
+  while True:
+    time.sleep(0.1)
+    if len(DB.votes) == 0 or not DB.vote_active:
+      return
+    if now() > DB.votes[-1]["end"] + 2000:
+      break
+  with app.app_context():
+    turbo.push(turbo.update(
+      render_template("vote.html",), "live-vote"))
+
+
 @app.route("/admin/start-vote", methods=["POST"])
 def start_vote():
 
@@ -24,19 +36,25 @@ def start_vote():
   })
   DB.vote_active = True
   turbo.push(turbo.update(
-      render_template("vote.html",), "live-vote"))
-  threading.Thread(
-    target=show_results,
-    args=(duration,)
-  ).start()
+    render_template("vote.html",), "live-vote"))
+  threading.Thread(target=show_results).start()
   return "ok"
 
 
-def show_results(duration):
-  time.sleep(duration + 2)
-  with app.app_context():
-    turbo.push(turbo.update(
-      render_template("vote.html",), "live-vote"))
+@app.route("/admin/extend-vote", methods=["POST"])
+def extend_vote():
+
+  if "admin" not in session:
+    abort(401)
+
+  if not DB.vote_active:
+    abort(400)
+
+  data = request.get_json()
+  DB.votes[-1]["end"] += data * 1000
+  turbo.push(turbo.update(
+    render_template("vote.html",), "live-vote"))
+  return "ok"
 
 
 @app.route("/admin/end-vote", methods=["POST"])
@@ -52,7 +70,7 @@ def end_vote():
   if DB.votes[-1]["end"] > end:
     DB.votes[-1]["end"] = end
   turbo.push(turbo.update(
-      render_template("vote.html",), "live-vote"))
+    render_template("vote.html",), "live-vote"))
   
   return "ok"
 
@@ -71,6 +89,6 @@ def cancel_vote():
     DB.votes[-1]["end"] = end
   DB.vote_active = False
   turbo.push(turbo.update(
-      render_template("vote.html",), "live-vote"))
+    render_template("vote.html",), "live-vote"))
   
   return "ok"
