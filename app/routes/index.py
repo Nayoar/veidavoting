@@ -61,3 +61,8 @@ def post_vote():
   DB.votes[-1]["votes"][user] = choice
 
   return "ok"
+
+
+@app.route("/favicon.ico")
+def favicon():
+  return redirect("https://www.bauk.org/wp-content/uploads/2023/03/cropped-SEMEL-TRANSPARENT-Sq-32x32.png")

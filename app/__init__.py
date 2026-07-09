@@ -2,12 +2,14 @@ from datetime import datetime
 from flask import abort, Flask, jsonify, redirect, render_template, request, session
 import os
 from turbo_flask import Turbo
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .db import DB
 
 now = lambda: int(datetime.now().timestamp() * 1000)
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 turbo = Turbo(app)
 app.secret_key = os.getenv("SECRET_KEY")
 app.config["PREFERRED_URL_SCHEME"] = "https"
