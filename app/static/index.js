@@ -7,7 +7,7 @@ $("#secret-code").on("keyup", e => {
 
 const login = () => {
   let username = $("#secret-code").val();
-  if (username == "admin") location.href = "/admin";
+  if (username == "admin") location.href = "/admin-login";
   else location.href = "?" + username;
 }
 

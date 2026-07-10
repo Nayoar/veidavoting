@@ -16,11 +16,9 @@ def show_results():
 
 
 @app.route("/admin/start-vote", methods=["POST"])
+@superadmin
 def start_vote():
 
-  if "admin" not in session:
-    abort(401)
-    
   data = request.get_json()
 
   start = now()
@@ -42,10 +40,8 @@ def start_vote():
 
 
 @app.route("/admin/extend-vote", methods=["POST"])
+@superadmin
 def extend_vote():
-
-  if "admin" not in session:
-    abort(401)
 
   if not DB.vote_active:
     abort(400)
@@ -58,10 +54,8 @@ def extend_vote():
 
 
 @app.route("/admin/end-vote", methods=["POST"])
+@superadmin
 def end_vote():
-
-  if "admin" not in session:
-    abort(401)
 
   if not DB.vote_active:
     abort(400)
@@ -76,10 +70,8 @@ def end_vote():
 
 
 @app.route("/admin/cancel-vote", methods=["POST"])
+@superadmin
 def cancel_vote():
-
-  if "admin" not in session:
-    abort(401)
 
   if not DB.vote_active:
     abort(400)

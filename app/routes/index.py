@@ -44,9 +44,11 @@ def post_vote():
     user = clean(list(request.args.keys())[0])
   else:
     abort(401)
-  if user not in DB.users \
-    or not DB.users \
-    or (user == "admin" and "admin" not in session):
+  if any([
+    user not in DB.users,
+    user == "admin" and not superadmin(),
+    not DB.users and not superadmin()
+  ]):
     abort(401)
 
   if user in DB.votes[-1]["votes"]:

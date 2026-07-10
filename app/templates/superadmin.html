@@ -18,16 +18,18 @@
   <div>
     <h3>Users</h3>
     <button onclick="newUser()">New user</button>
-    <span id="new-user"></span><br><br>
-    <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
+    <!-- <span id="new-user"></span><br><br> -->
+    <input id="toggle-user" onkeyup="unspace(this)" list="userlist"><br><br>
     <button onclick="activateUser()">Activate</button>
     <button onclick="deactivateUser()">Deactivate</button>
+    <button onclick="suspendUser()">Suspend</button>
+    <button onclick="unsuspend()">Unsuspend all</button>
     <span id="confirm-toggle"></span>
   </div>
 
   <div>
     <h3>Message</h3>
-    <textarea id="message" spellcheck="false">{{ message }}</textarea>
+    <textarea id="edit-message" spellcheck="false">{{ message }}</textarea>
     <button onclick="setMessage('none')">Set as message</button>
     <button onclick="setMessage('motion')">Set as motion</button>
     <button onclick="setMessage('constitutional')">Set as constitutional amendment</button>
@@ -60,7 +62,10 @@
       {% include "active_user.html" %}
     {% endwith %}</div>
   </div>
-  
+
+  <button onclick="superadminLogout()">Superadmin logout</button>
+  <button onclick="adminLogout(true)">Admin logout</button>
+  <br><br><br>
 
 {% endblock %}
 

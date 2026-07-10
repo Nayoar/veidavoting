@@ -1,4 +1,18 @@
-#message {
+#useradmin {
+  border: 1px solid white;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+#useradmin h3 {
+  margin-top: 0;
+}
+
+#useradmin + #live-message {
+  margin-top: 16px;
+}
+
+#edit-message {
   width: 100%;
   height: 200px;
   resize: none;

@@ -1,4 +1,4 @@
-{% if user in users and users[user] %}
+{% if user in users and (users[user] or superadmin) %}
 
   {% if vote_active and user in votes[-1]["votes"] %}
     <div id="live-vote" style="

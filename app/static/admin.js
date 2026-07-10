@@ -1,5 +1,5 @@
-const sendUpdate = (data, outID) => {
-  fetch("/admin/update",
+const sendUpdate = (url, data, outID) => {
+  fetch(url,
     {
       method: "POST",
       headers: {
@@ -26,29 +26,43 @@ const newUser = () => {
   )
   .then(r => r.text())
   .then(t => {
-    $("#new-user").html(t);
+    $("#toggle-user").val(t);
     $("#userlist").append(`<option value="${t}">`);
 })
 }
 
-const activateUser = () => {
-  sendUpdate({
-    activate: $("#toggle-user").val()
-  }, "confirm-toggle");
-}
+const activateUser = () => sendUpdate(
+  "/admin/activate-user",
+  $("#toggle-user").val(),
+  "confirm-toggle"
+);
 
-const deactivateUser = () => {
-  sendUpdate({
-    deactivate: $("#toggle-user").val()
-  }, "confirm-toggle");
-}
+const deactivateUser = () => sendUpdate(
+  "/admin/deactivate-user",
+  $("#toggle-user").val(),
+  "confirm-toggle"
+);
 
-const setMessage = m => {
-  sendUpdate({
+const suspendUser = () => sendUpdate(
+  "/admin/suspend-user",
+  $("#toggle-user").val(),
+  "confirm-toggle"
+);
+
+const unsuspend = () => sendUpdate(
+  "/admin/unsuspend",
+  {},
+  "confirm-toggle"
+);
+
+const setMessage = m => sendUpdate(
+  "/admin/update-message",
+  {
     mode: m,
-    message: $("#message").val()
-  }, "message-confirm");
-}
+    message: $("#edit-message").val()
+  },
+  "message-confirm"
+);
 
 const presets = {
   "suspend-e4": "Suspend section E4 of the Constitution",
@@ -121,4 +135,17 @@ const endVote = a => {
     if (r.status != 200) out.innerHTML = "Error :(";
     setTimeout(() => out.innerHTML = "", 1500);
   })
+}
+
+const adminLogout = x => {
+  fetch("/admin-logout")
+  .then(r => {
+    if (x) location.href = "/";
+    else location.reload();
+  });
+}
+
+const superadminLogout = () => {
+  fetch("/superadmin-logout")
+  .then(r => location.href = "/");
 }

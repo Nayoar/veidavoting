@@ -2,9 +2,14 @@
 
 {% block head %}
   <link href="/static/index.css" rel="stylesheet" type="text/css" />
+  {% if admin %}
+    <link href="/static/admin.css" rel="stylesheet" type="text/css" />
+  {% endif %}
 {% endblock %}
 
 {% block content %}
+
+{% if admin %}{% include "useradmin.html" %}{% endif %}
 
 {% if user in users %}
   <p id="username"><i>{{ user }}</i></p>
@@ -29,5 +34,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/index.js"></script>
+  <script src="/static/index.js"></script>
+  {% if admin %}
+    <script src="/static/admin.js"></script>
+  {% endif %}
 {% endblock %}

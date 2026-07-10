@@ -15,12 +15,16 @@ app.secret_key = os.getenv("SECRET_KEY")
 app.config["PREFERRED_URL_SCHEME"] = "https"
 app.config["SESSION_COOKIE_SECURE"] = True
 
-from . import routes
 
 @app.context_processor
 def inject_db():
   
-  context = {**DB, "now": now()}
+  context = {
+    **DB,
+    "now": now(),
+    "admin": admin(),
+    "superadmin": superadmin()
+  }
 
   if len(DB.votes) > 0:
     votes = list(DB.votes[-1]["votes"].values())
@@ -31,3 +35,27 @@ def inject_db():
     context["total_voters"] = list(DB.users.values()).count(True)
 
   return context
+
+
+def admin(func=None):
+  if func is None:
+    return session.get("admin") != "0"
+  def wrapper(*args, **kwargs):
+    if session.get("admin", "0") == "0":
+      return abort(401)
+    return func(*args, **kwargs)
+  wrapper.__name__ = func.__name__
+  return wrapper
+  
+def superadmin(func=None):
+  if func is None:
+    return session.get("admin") == "2"
+  def wrapper(*args, **kwargs):
+    if session.get("admin", "0") != "2":
+      return abort(401)
+    return func(*args, **kwargs)
+  wrapper.__name__ = func.__name__
+  return wrapper
+  
+
+from . import routes

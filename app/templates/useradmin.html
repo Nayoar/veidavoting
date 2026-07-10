@@ -1,0 +1,18 @@
+<div id="useradmin">
+  <h3>Admin Tools</h3>
+
+  <datalist id="userlist">
+    {% for user in users if user != "admin" %}
+      <option value="{{ user }}">
+    {% endfor %}
+  </datalist>
+
+  <div>
+    Enter a secret code: <input id="toggle-user" onkeyup="unspace(this)" list="userlist" style="margin-bottom: 16px;"><br>
+    <button onclick="deactivateUser()">Deactivate</button>
+    <button onclick="suspendUser()">Reactivate at start of next motion</button>
+    <span id="confirm-toggle"></span>
+  </div><br>
+
+  <button onclick="adminLogout(false)">Log out as admin</button><br>
+</div>
