@@ -1,35 +1,46 @@
 from .. import *
 
-def clean(user):
-  return user.lower().strip("-")
 
-def get_id():
-  return session.get("user")
-
-@turbo.user_id
-def get_user_id():
-  return get_id()
-  
 @app.route("/")
 def index():
 
-  if len(request.args) > 0:
-    session["user"] = clean(list(request.args.keys())[0])
-  else:
-    if "user" in session:
-      session.pop("user")
+  user = get_user()
+  if user is not None:
+    if superadmin():
+      return render_template("superadmin.html", user=user)
+    return render_template(
+      "index.html",
+      user = user,
+      admin = admin()
+    )
 
-  user = get_id()
-  if user == "admin":
-    user = "congrats you found an easter egg"
-  if user in DB.users and DB.users[user] is None:
-    DB.users[user] = True
-  invalid = user is not None and user not in DB.users
-  return render_template(
-    "index.html",
-    user = user if user in DB.users else None,
-    invalid = invalid
-  ), 401 if invalid else 200
+  if len(request.args) > 0:
+    user = list(request.args.keys())[0].lower().strip("-")
+    if user in DB.users:
+      if vote_status(user) == 0:
+        session["user"] = user
+        if superadmin():
+          return render_template("superadmin.html", user=user)
+        DB.users[user]["status"] = 3
+        return render_template(
+          "index.html",
+          user = user,
+          admin = admin()
+        )
+      else:
+        return render_template(
+          "index.html",
+          user = None,
+          error = "already"
+        ), 403
+    else:
+      return render_template(
+        "index.html",
+        user = None,
+        error = "invalid"
+      ), 401
+    
+  return render_template("index.html", user=None)
 
 
 @app.route("/display")
@@ -40,15 +51,8 @@ def display():
 @app.route("/", methods=["POST"])
 def post_vote():
 
-  if len(request.args) > 0:
-    user = clean(list(request.args.keys())[0])
-  else:
-    abort(401)
-  if any([
-    user not in DB.users,
-    user == "admin" and not superadmin(),
-    not DB.users and not superadmin()
-  ]):
+  user = get_user()
+  if vote_status(user) != 3:
     abort(401)
 
   if user in DB.votes[-1]["votes"]:

@@ -1,26 +1,43 @@
-{% if user in users and (users[user] or superadmin) %}
+{% if user and users[user]["status"] == 3 %}
 
   {% if vote_active and user in votes[-1]["votes"] %}
     <div id="live-vote" style="
       --active: block;
-      --inactive: none;"
-    >{% with
+      --inactive: none;
+      --suspended: none;
+    ">{% with
       voted = true,
       choice = votes[-1]['votes'][user]
     %}{% include "vote.html" %}{% endwith %}</div>
   {% else %}
     <div id="live-vote" style="
       --active: block;
-      --inactive: none;"
-    >{% with
+      --inactive: none;
+      --suspended: none;
+    ">{% with
       voted = false
     %}{% include "vote.html" %}{% endwith %}</div>
   {% endif %}
 
-{% elif user in users and not users[user] %}
-  <div id="live-vote" style="--active: none; --inactive: block;">
+{% elif user and users[user]["status"] == 2 %}
+  <div id="live-vote" style="
+  --active: none;
+  --inactive: none;
+  --suspended: block;
+  ">
+    {% include "vote.html" %}</div>
+{% elif user and users[user]["status"] == 1 %}
+  <div id="live-vote" style="
+  --active: none;
+  --inactive: block;
+  --suspended: none;
+  ">
     {% include "vote.html" %}</div>
 {% else %}
-  <div id="live-vote" style="--active: none; --inactive: none;">
+  <div id="live-vote" style="
+  --active: none;
+  --inactive: none;
+  --suspended: none;
+  ">
     {% include "vote.html" %}</div>
 {% endif %}

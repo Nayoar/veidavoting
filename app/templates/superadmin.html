@@ -10,7 +10,7 @@
 {% block content %}
 
   <datalist id="userlist">
-    {% for user in users if user != "admin" %}
+    {% for user in users %}
       <option value="{{ user }}">
     {% endfor %}
   </datalist>
@@ -18,7 +18,6 @@
   <div>
     <h3>Users</h3>
     <button onclick="newUser()">New user</button>
-    <!-- <span id="new-user"></span><br><br> -->
     <input id="toggle-user" onkeyup="unspace(this)" list="userlist"><br><br>
     <button onclick="activateUser()">Activate</button>
     <button onclick="deactivateUser()">Deactivate</button>
@@ -58,13 +57,11 @@
 
     <br><span id="vote-confirm"></span>
 
-    <div id="active-user">{% with user="admin" %}
-      {% include "active_user.html" %}
-    {% endwith %}</div>
+    <p id="username"><i>{{ user }}</i></p>
+    <div id="active-user">{% include "active_user.html" %}</div>
   </div>
 
-  <button onclick="superadminLogout()">Superadmin logout</button>
-  <button onclick="adminLogout(true)">Admin logout</button>
+  <button onclick="logout()">Logout</button>
   <br><br><br>
 
 {% endblock %}

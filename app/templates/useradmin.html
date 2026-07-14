@@ -9,10 +9,10 @@
 
   <div>
     Enter a secret code: <input id="toggle-user" onkeyup="unspace(this)" list="userlist" style="margin-bottom: 16px;"><br>
+    <button onclick="activateUser()">Activate</button>
     <button onclick="deactivateUser()">Deactivate</button>
     <button onclick="suspendUser()">Reactivate at start of next motion</button>
     <span id="confirm-toggle"></span>
-  </div><br>
+  </div>
 
-  <button onclick="adminLogout(false)">Log out as admin</button><br>
 </div>

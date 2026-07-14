@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import abort, Flask, jsonify, redirect, render_template, request, session
 import os
+import requests
 from turbo_flask import Turbo
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -21,9 +22,7 @@ def inject_db():
   
   context = {
     **DB,
-    "now": now(),
-    "admin": admin(),
-    "superadmin": superadmin()
+    "now": now()
   }
 
   if len(DB.votes) > 0:
@@ -37,11 +36,40 @@ def inject_db():
   return context
 
 
+@app.before_request
+def ip_info():
+  ip = request.headers.get("CF-Connecting-IP")
+  r = requests.get(f"https://api.ipinfo.io/lite/{ip}?token=ab6193ddc8b6b8").json()
+  try:
+    print(r["ip"], "|", r["as_name"], "|", r["country"])
+  except:
+    pass
+
+
+def get_user():
+  user = session.get("user")
+  if user is None or user not in DB.users:
+    return None
+  return user
+
+@turbo.user_id
+def turbo_get_user():
+  return session.get("user")
+
+def admin_lvl(user):
+  return DB.users[user]["admin"] if user is not None else 0
+
+def vote_status(user):
+  return DB.users[user]["status"] if user is not None else 0
+
+
 def admin(func=None):
   if func is None:
-    return session.get("admin") != "0"
+    user = get_user()
+    return admin_lvl(user) != 0
   def wrapper(*args, **kwargs):
-    if session.get("admin", "0") == "0":
+    user = get_user()
+    if admin_lvl(user) == 0:
       return abort(401)
     return func(*args, **kwargs)
   wrapper.__name__ = func.__name__
@@ -49,9 +77,11 @@ def admin(func=None):
   
 def superadmin(func=None):
   if func is None:
-    return session.get("admin") == "2"
+    user = get_user()
+    return admin_lvl(user) == 2
   def wrapper(*args, **kwargs):
-    if session.get("admin", "0") != "2":
+    user = get_user()
+    if admin_lvl(user) != 2:
       return abort(401)
     return func(*args, **kwargs)
   wrapper.__name__ = func.__name__

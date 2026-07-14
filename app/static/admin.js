@@ -137,15 +137,7 @@ const endVote = a => {
   })
 }
 
-const adminLogout = x => {
-  fetch("/admin-logout")
-  .then(r => {
-    if (x) location.href = "/";
-    else location.reload();
-  });
-}
-
-const superadminLogout = () => {
-  fetch("/superadmin-logout")
+const logout = () => {
+  fetch("/admin/logout")
   .then(r => location.href = "/");
 }
