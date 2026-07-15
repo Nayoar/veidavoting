@@ -23,10 +23,11 @@
     <div class="spacer"></div>
 
     <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
+    <button onclick="$('#toggle-user').val('')">X</button>
     <div class="spacer"></div>
 
     Status:
-    <button onclick="deleteUser()">&#10060;</button>
+    <button onclick="deleteUser()">&#128465;</button>
     <button onclick="userStatus(0)">0</button>
     <button onclick="userStatus(1)">1</button>
     <button onclick="userStatus(2)">2</button>
@@ -86,7 +87,7 @@
 
     </div>
     <div id="no-voters">
-      
+
     </div>
   </div>
 

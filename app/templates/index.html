@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
-  <link href="/static/index.css" rel="stylesheet" type="text/css" />
+  <link href="/static/index.css?1" rel="stylesheet" type="text/css" />
   {% if admin %}
-    <link href="/static/admin.css" rel="stylesheet" type="text/css" />
+    <link href="/static/admin.css?1" rel="stylesheet" type="text/css" />
   {% endif %}
 {% endblock %}
 
@@ -38,8 +38,8 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="/static/index.js"></script>
+  <script src="/static/index.js?1"></script>
   {% if admin %}
-    <script src="/static/admin.js"></script>
+    <script src="/static/admin.js?1"></script>
   {% endif %}
 {% endblock %}
