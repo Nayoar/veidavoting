@@ -2,23 +2,60 @@ from .. import *
 from ..words import random_phrase
 
 
+def update_userlist():
+  turbo.push(turbo.update(
+    render_template("userlist.html",), "userlist"))
+  
+def refresh(user):
+  update = turbo.update(
+    render_template("refresh.html"),
+    "refresh"
+  ),
+  if user is None or user == "":
+    turbo.push(update)
+  else:
+    if turbo.can_push(to=user):
+      turbo.push(update, to=user)
+
+
+
 @app.route("/admin/new-user", methods=["POST"])
-@admin
+@superadmin
 def new_user():
-  new_user = random_phrase(DB.users)
+  new_user = request.args.get("name")
+  if new_user is None:
+    new_user = random_phrase(DB.users)
   if new_user is None:
     abort(500)
   DB.users[new_user] = {"status": 0, "admin": 0}
+  update_userlist()
   return new_user
 
 
-@app.route("/admin/activate-user", methods=["POST"])
+@app.route("/admin/new-admin", methods=["POST"])
+@superadmin
+def new_admin():
+  new_user = request.args.get("name")
+  if new_user is None:
+    new_user = random_phrase(DB.users)
+  if new_user is None:
+    abort(500)
+  DB.users[new_user] = {"status": 0, "admin": 1}
+  update_userlist()
+  return new_user
+
+
+@app.route("/admin/user-status", methods=["POST"])
 @admin
-def activate_user():
-  user = request.get_json()
-  if user not in DB.users:
+def user_status():
+  data = request.get_json()
+  user = data["user"]
+  status = data["status"]
+  if user not in DB.users or status not in [0, 1, 2, 3]:
     abort(400)
-  DB.users[user]["status"] = 3
+  if status == 0 and not superadmin():
+    abort(401)
+  DB.users[user]["status"] = status
   if turbo.can_push(to=user):
     turbo.push(
       turbo.update(
@@ -27,42 +64,7 @@ def activate_user():
       ),
       to=user
     )
-  return "ok"
-
-
-@app.route("/admin/deactivate-user", methods=["POST"])
-@admin
-def deactivate_user():
-  user = request.get_json()
-  if user not in DB.users:
-    abort(400)
-  DB.users[user]["status"] = 1
-  if turbo.can_push(to=user):
-    turbo.push(
-      turbo.update(
-        render_template("active_user.html", user=user),
-        "active-user"
-      ),
-      to=user
-    )
-  return "ok"
-
-
-@app.route("/admin/suspend-user", methods=["POST"])
-@admin
-def suspend_user():
-  user = request.get_json()
-  if user not in DB.users:
-    abort(400)
-  DB.users[user] = 2
-  if turbo.can_push(to=user):
-    turbo.push(
-      turbo.update(
-        render_template("active_user.html", user=user),
-        "active-user"
-      ),
-      to=user
-    )
+  update_userlist()
   return "ok"
 
 
@@ -80,6 +82,43 @@ def unsuspend():
           ),
           to=user
         )
+  update_userlist()
+  return "ok"
+
+
+@app.route("/admin/delete-user", methods=["POST"])
+@superadmin
+def delete_user():
+  user = request.get_json()
+  if user not in DB.users or admin_lvl(user) == 2:
+    abort(400)
+  del DB.users[user]
+  refresh(user)
+  update_userlist()
+  return "ok"
+
+
+@app.route("/admin/admin-status", methods=["POST"])
+@superadmin
+def admin_status():
+  data = request.get_json()
+  user = data["user"]
+  status = data["status"]
+  if user not in DB.users \
+    or admin_lvl(user) == 2 \
+    or status not in [0, 1]:
+    abort(400)
+  DB.users[user]["admin"] = status
+  refresh(user)
+  update_userlist()
+  return "ok"
+
+
+@app.route("/admin/force-refresh", methods=["POST"])
+@superadmin
+def force_refresh():
+  user = request.get_json()
+  refresh(user)
   return "ok"
 
 

@@ -1,4 +1,4 @@
-const unspace = e => e.val(e.val().replace(" ", "-"))
+const unspace = e => $(e).val($(e).val().replace(" ", "-"))
 
 $("#secret-code").on("keyup", e => {
   if (e.key === "Enter" || e.keyCode === 13) login();

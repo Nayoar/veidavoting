@@ -19,9 +19,9 @@ def index():
     if user in DB.users:
       if vote_status(user) == 0:
         session["user"] = user
+        DB.users[user]["status"] = 3
         if superadmin():
           return render_template("superadmin.html", user=user)
-        DB.users[user]["status"] = 3
         return render_template(
           "index.html",
           user = user,

@@ -2,16 +2,14 @@
   <h3>Admin Tools</h3>
 
   <datalist id="userlist">
-    {% for user in users if user != "admin" %}
-      <option value="{{ user }}">
-    {% endfor %}
+    {% include "userlist.html" %}
   </datalist>
 
   <div>
     Enter a secret code: <input id="toggle-user" onkeyup="unspace(this)" list="userlist" style="margin-bottom: 16px;"><br>
-    <button onclick="activateUser()">Activate</button>
-    <button onclick="deactivateUser()">Deactivate</button>
-    <button onclick="suspendUser()">Reactivate at start of next motion</button>
+    <button onclick="userStatus(3)">Activate</button>
+    <button onclick="userStatus(1)">Deactivate</button>
+    <button onclick="userStatus(2)">Reactivate at start of next motion</button>
     <span id="confirm-toggle"></span>
   </div>
 

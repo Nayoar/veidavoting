@@ -1,0 +1,9 @@
+{% for user in users %}
+  <option value="{{ user }}">
+    {% if users[user]["admin"] > 0 %}Admin; {% endif %}
+    {% if users[user]["status"] == 0 %}Unused{% endif %}
+    {% if users[user]["status"] == 1 %}Deactivated{% endif %}
+    {% if users[user]["status"] == 2 %}Deactivated until next motion{% endif %}
+    {% if users[user]["status"] == 3 %}Active{% endif %}
+  </option>
+{% endfor %}

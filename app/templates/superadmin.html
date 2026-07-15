@@ -10,19 +10,36 @@
 {% block content %}
 
   <datalist id="userlist">
-    {% for user in users %}
-      <option value="{{ user }}">
-    {% endfor %}
+    {% include "userlist.html" %}
   </datalist>
 
   <div>
     <h3>Users</h3>
+
     <button onclick="newUser()">New user</button>
-    <input id="toggle-user" onkeyup="unspace(this)" list="userlist"><br><br>
-    <button onclick="activateUser()">Activate</button>
-    <button onclick="deactivateUser()">Deactivate</button>
-    <button onclick="suspendUser()">Suspend</button>
-    <button onclick="unsuspend()">Unsuspend all</button>
+    <button onclick="newAdmin()">New admin</button>
+    <button onclick="newUser(prompt())">Custom user</button>
+    <button onclick="newAdmin(prompt())">Custom admin</button>
+    <div class="spacer"></div>
+
+    <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
+    <div class="spacer"></div>
+
+    Status:
+    <button onclick="deleteUser()">&#10060;</button>
+    <button onclick="userStatus(0)">0</button>
+    <button onclick="userStatus(1)">1</button>
+    <button onclick="userStatus(2)">2</button>
+    <button onclick="userStatus(3)">3</button>
+    <button onclick="unsuspend()">All 2->3</button>
+    &nbsp; &nbsp;
+    Admin:
+    <button onclick="adminStatus(0)">0</button>
+    <button onclick="adminStatus(1)">1</button>
+    &nbsp; &nbsp;
+    <button onclick="refresh()">&#x21bb;</button>
+    <div class="spacer"></div>
+
     <span id="confirm-toggle"></span>
   </div>
 
@@ -61,7 +78,19 @@
     <div id="active-user">{% include "active_user.html" %}</div>
   </div>
 
-  <button onclick="logout()">Logout</button>
+  <div id="voters">
+    <div id="yes-voters">
+
+    </div>
+    <div id="abstain-voters">
+
+    </div>
+    <div id="no-voters">
+      
+    </div>
+  </div>
+
+  <button onclick="logout()">Log out</button>
   <br><br><br>
 
 {% endblock %}

@@ -40,3 +40,16 @@
 #live-vote {
   margin: 20px;
 }
+
+.spacer {
+  height: 12px;
+}
+
+#voters {
+  display: flex;
+  flex-grow: 1;
+}
+
+#voters > div {
+  width: calc(100% / 3);
+}

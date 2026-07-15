@@ -48,7 +48,7 @@ def ip_info():
 
 def get_user():
   user = session.get("user")
-  if user is None or user not in DB.users:
+  if user not in DB.users:
     return None
   return user
 

@@ -20,32 +20,28 @@ const sendUpdate = (url, data, outID) => {
   })
 }
 
-const newUser = () => {
-  fetch("/admin/new-user",
+const newUser = name => {
+  fetch("/admin/new-user" + (name !== undefined ? "?name="+name : ""),
     {method: "POST"}
   )
   .then(r => r.text())
-  .then(t => {
-    $("#toggle-user").val(t);
-    $("#userlist").append(`<option value="${t}">`);
-})
+  .then(t => $("#toggle-user").val(t))
 }
 
-const activateUser = () => sendUpdate(
-  "/admin/activate-user",
-  $("#toggle-user").val(),
-  "confirm-toggle"
-);
+const newAdmin = name => {
+  fetch("/admin/new-admin" + (name !== undefined ? "?name="+name : ""),
+    {method: "POST"}
+  )
+  .then(r => r.text())
+  .then(t => $("#toggle-user").val(t))
+}
 
-const deactivateUser = () => sendUpdate(
-  "/admin/deactivate-user",
-  $("#toggle-user").val(),
-  "confirm-toggle"
-);
-
-const suspendUser = () => sendUpdate(
-  "/admin/suspend-user",
-  $("#toggle-user").val(),
+const userStatus = s => sendUpdate(
+  "/admin/user-status",
+  {
+    user: $("#toggle-user").val(),
+    status: s
+  },
   "confirm-toggle"
 );
 
@@ -54,6 +50,30 @@ const unsuspend = () => sendUpdate(
   {},
   "confirm-toggle"
 );
+
+const deleteUser = () => {
+  sendUpdate(
+    "/admin/delete-user",
+    $("#toggle-user").val(),
+    "confirm-toggle"
+  );
+  $("#toggle-user").val("");
+}
+
+const adminStatus = s => sendUpdate(
+  "/admin/admin-status",
+  {
+    user: $("#toggle-user").val(),
+    status: s
+  },
+  "confirm-toggle"
+)
+
+const refresh = () => sendUpdate(
+  "/admin/force-refresh",
+  $("#toggle-user").val(),
+  "confirm-toggle"
+)
 
 const setMessage = m => sendUpdate(
   "/admin/update-message",
