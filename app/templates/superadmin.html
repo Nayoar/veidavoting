@@ -13,7 +13,7 @@
     {% include "userlist.html" %}
   </datalist>
 
-  <div>
+  <div id="manage-users">
     <h3>Users</h3>
 
     <button onclick="newUser()">New user</button>
@@ -38,7 +38,8 @@
     <button onclick="adminStatus(0)">0</button>
     <button onclick="adminStatus(1)">1</button>
     &nbsp; &nbsp;
-    <button onclick="refresh()">&#x21bb;</button>
+    <button onclick="runScript('location.reload();')">&#x21bb;</button>
+    <button onclick="runScript(prompt())">&#9658;</button>
     <div class="spacer"></div>
 
     <span id="confirm-toggle"></span>

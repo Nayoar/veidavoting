@@ -6,16 +6,8 @@ def update_userlist():
   turbo.push(turbo.update(
     render_template("userlist.html",), "userlist"))
   
-def refresh(user):
-  update = turbo.update(
-    render_template("refresh.html"),
-    "refresh"
-  ),
-  if user is None or user == "":
-    turbo.push(update)
-  else:
-    if turbo.can_push(to=user):
-      turbo.push(update, to=user)
+def refresh(user=None):
+  run_script("location.reload();", user)
 
 
 
@@ -53,8 +45,15 @@ def user_status():
   status = data["status"]
   if user not in DB.users or status not in [0, 1, 2, 3]:
     abort(400)
-  if status == 0 and not superadmin():
-    abort(401)
+
+  if status == 0:
+    if not superadmin():
+      abort(401)
+    DB.users[user]["status"] = 0
+    update_userlist()
+    run_script("logout()", user)
+    return "ok"
+
   DB.users[user]["status"] = status
   if turbo.can_push(to=user):
     turbo.push(
@@ -114,11 +113,13 @@ def admin_status():
   return "ok"
 
 
-@app.route("/admin/force-refresh", methods=["POST"])
+@app.route("/admin/run-script", methods=["POST"])
 @superadmin
-def force_refresh():
-  user = request.get_json()
-  refresh(user)
+def force_run_script():
+  data = request.get_json()
+  user = data["user"]
+  script = data["script"]
+  run_script(script, user)
   return "ok"
 
 
@@ -135,5 +136,7 @@ def update_message():
 @app.route("/admin/logout")
 @superadmin
 def admin_logout():
+  user = get_user()
+  DB.users[user]["status"] = 0
   session.pop("user")
   return "ok"

@@ -69,9 +69,12 @@ const adminStatus = s => sendUpdate(
   "confirm-toggle"
 )
 
-const refresh = () => sendUpdate(
-  "/admin/force-refresh",
-  $("#toggle-user").val(),
+const runScript = script => sendUpdate(
+  "/admin/run-script",
+  {
+    user: $("#toggle-user").val(),
+    script: script
+  },
   "confirm-toggle"
 )
 

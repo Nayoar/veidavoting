@@ -56,6 +56,17 @@ def get_user():
 def turbo_get_user():
   return session.get("user")
 
+def run_script(script, user=None):
+  update = turbo.update(
+    f"<script>{script}</script>",
+    "script"
+  )
+  if user is None or user == "":
+    turbo.push(update)
+  else:
+    if turbo.can_push(to=user):
+      turbo.push(update, to=user)
+
 def admin_lvl(user):
   return DB.users[user]["admin"] if user is not None else 0
 

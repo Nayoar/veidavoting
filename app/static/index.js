@@ -11,6 +11,13 @@ const login = () => {
   else location.href = "?" + username;
 }
 
+const logout = () => {
+  fetch("/logout")
+  .then(r => {
+    if (r.status == 200) location.href = "/";
+  })
+}
+
 const vote = e => {
   if ($(e).hasClass("selected")) {
     $(e).removeClass("selected");

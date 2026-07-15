@@ -12,6 +12,15 @@
   margin-top: 16px;
 }
 
+#manage-users {
+  position: relative;
+}
+
+#confirm-toggle {
+  position: absolute;
+  right: 0;
+}
+
 #edit-message {
   width: 100%;
   height: 200px;
