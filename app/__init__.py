@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask import abort, Flask, jsonify, redirect, render_template, request, session
+import logging
 import os
+import uuid
 import requests
 from turbo_flask import Turbo
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -15,6 +17,11 @@ turbo = Turbo(app)
 app.secret_key = os.getenv("SECRET_KEY")
 app.config["PREFERRED_URL_SCHEME"] = "https"
 app.config["SESSION_COOKIE_SECURE"] = True
+
+class HealthzFilter(logging.Filter):
+  def filter(self, record):
+    return "/healthz" not in record.getMessage() and "/ws-check" not in record.getMessage()
+logging.getLogger("werkzeug").addFilter(HealthzFilter())
 
 
 @app.context_processor
@@ -36,8 +43,10 @@ def inject_db():
   return context
 
 
-@app.before_request
+# @app.before_request
 def ip_info():
+  if "/healthz" in request.path or "/ws-check" in request.path:
+    return
   ip = request.headers.get("CF-Connecting-IP")
   r = requests.get(f"https://api.ipinfo.io/lite/{ip}?token=ab6193ddc8b6b8").json()
   try:
@@ -52,9 +61,17 @@ def get_user():
     return None
   return user
 
-@turbo.user_id
 def turbo_get_user():
-  return session.get("user")
+  user = session.get("user")
+  if user is None:
+    _id = session.get("turbo_id")
+    if _id is None:
+      session["turbo_id"] = uuid.uuid4()
+    return session.get("turbo_id")
+  return user
+
+turbo_get_id = turbo.user_id(turbo_get_user)
+    
 
 def run_script(script, user=None):
   update = turbo.update(

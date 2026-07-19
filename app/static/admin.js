@@ -1,3 +1,5 @@
+const toggleNext = e => $(e).next().slideToggle();
+
 const sendUpdate = (url, data, outID) => {
   fetch(url,
     {
@@ -160,7 +162,77 @@ const endVote = a => {
   })
 }
 
-const logout = () => {
+const startElection = () => {
+  fetch("/admin/start-election",
+    {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        role: $("#election-role").val(),
+        positions: parseInt($("#election-positions").val()),
+        candidates: $("#election-candidates").val().split(/[\r\n]+/g),
+        duration: parseInt($("#election-duration").val())
+      })
+    }
+  )
+  .then(r => {
+    let out = document.getElementById("election-confirm");
+    if (r.status != 200) out.innerHTML = "Error :(";
+    setTimeout(() => out.innerHTML = "", 1500);
+  })
+}
+
+const extendElection = () => {
+  let duration = parseInt($("#election-duration").val());
+  fetch("/admin/extend-election",
+    {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(duration)
+    }
+  )
+  .then(r => {
+    let out = document.getElementById("election-confirm");
+    if (r.status != 200) out.innerHTML = "Error :(";
+    setTimeout(() => out.innerHTML = "", 1500);
+  })
+}
+
+const endElection = a => {
+  fetch(a ? "/admin/end-election" : "/admin/cancel-election",
+    {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    }
+  )
+  .then(r => {
+    let out = document.getElementById("election-confirm");
+    if (r.status != 200) out.innerHTML = "Error :(";
+    setTimeout(() => out.innerHTML = "", 1500);
+  })
+}
+
+const clearElection = () => {
+  fetch("/admin/clear-election",
+    {method: "POST"}
+  )
+  .then(r => {
+    let out = document.getElementById("election-confirm");
+    if (r.status != 200) out.innerHTML = "Error :(";
+    setTimeout(() => out.innerHTML = "", 1500);
+  })
+}
+
+const adminLogout = () => {
   fetch("/admin/logout")
   .then(r => location.href = "/");
 }

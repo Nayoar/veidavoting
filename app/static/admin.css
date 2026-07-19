@@ -12,6 +12,18 @@
   margin-top: 16px;
 }
 
+.toggler {
+  cursor: pointer;
+  width: 180px;
+  margin: 16px auto;
+  transition: background-color 0.3s;
+  border-radius: 12px;
+}
+
+.toggler:hover {
+  background-color: #224;
+}
+
 #manage-users {
   position: relative;
 }
@@ -22,7 +34,7 @@
 }
 
 #edit-message {
-  width: 100%;
+  width: 95%;
   height: 200px;
   resize: none;
 }
@@ -38,7 +50,7 @@
   flex-grow: 1;
 }
 
-#duration {
+#duration, #election-duration {
   width: 64px;
 }
 
@@ -61,4 +73,39 @@
 
 #voters > div {
   width: calc(100% / 3);
+}
+
+#election-config {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+#election-candidates {
+  height: 240px;
+  width: 240px;
+  flex-grow: 1;
+}
+
+#election-config > div {
+  margin: 8px;
+}
+
+#election-positions {
+  width: 40px;
+}
+
+#election-config input {
+  margin: 4px;
+}
+
+#election-config button {
+  height: 30px;
+  margin: 2px;
+}
+
+#username {
+  border-top: 6px double white;
+  margin-top: 48px;
+  padding-top: 24px;
 }

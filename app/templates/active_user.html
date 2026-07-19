@@ -41,3 +41,49 @@
   ">
     {% include "vote.html" %}</div>
 {% endif %}
+
+
+
+{% if vote_active and user in elections[-1]["votes"] %}
+
+  <div id="live-election" style="
+    --active: block;
+    --inactive: none;
+    --suspended: none;
+  ">{% with
+    voted = true,
+    choice = elections[-1]["votes"][user]
+  %}{% include "election.html" %}{% endwith %}</div>
+
+{% elif vote_active and user and users[user]["status"] == 3 %}
+
+    <div id="live-election" style="
+      --active: block;
+      --inactive: none;
+      --suspended: none;
+    ">{% with
+      voted = false,
+      choice = elections[-1]["provisional"][user] if user in elections[-1]["provisional"] else {"unselected": elections[-1]["candidates"] | shuffle, "selected": []}
+    %}{% include "election.html" %}{% endwith %}</div>
+
+{% elif user %}
+  <div id="live-election" style="
+  --active: none;
+  --inactive: block;
+  --deactivated: block;
+  ">
+    {% with
+      voted = false,
+      choice = {"selected": [], "unselected": []}
+    %}{% include "election.html" %}{% endwith %}</div>
+{% else %}
+  <div id="live-election" style="
+  --active: none;
+  --inactive: block;
+  --deactivated: none;
+  ">
+    {% with
+      voted = false,
+      choice = {"selected": [], "unselected": []}
+    %}{% include "election.html" %}{% endwith %}</div></div>
+{% endif %}

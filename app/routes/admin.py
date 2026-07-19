@@ -127,7 +127,8 @@ def force_run_script():
 @superadmin
 def update_message():
   data = request.get_json()
-  DB.mode = data.get("mode", "nothing")
+  if DB.mode != "election":
+    DB.mode = data.get("mode", "nothing")
   DB.message = data["message"]
   turbo.push(turbo.update(render_template("message.html"), "live-message"))
   return "ok"

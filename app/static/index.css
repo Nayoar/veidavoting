@@ -188,3 +188,118 @@ span#message, #vote {
 #total-voters {
   margin: 12px;
 }
+
+
+
+#live-election {
+  text-align: left;
+  padding: 16px;
+}
+
+#role-title {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+#election-timer span {
+  font-weight: 800;
+}
+
+#election-submitted li {
+  font-weight: 800;
+}
+
+.list-title {
+  font-size: 20px;
+  font-weight: 800;
+  border-bottom: 1px solid white;
+  margin-bottom: 8px;
+}
+
+#all-selected, #none-selected {
+  display: none;
+}
+
+:is(#all-selected, #none-selected):not(:has(+ div > .candidate)) {
+  display: block;
+}
+
+#available-candidates + p {
+  display: none;
+}
+
+#available-candidates.max-reached + p {
+  display: block;
+}
+
+.candidate {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.candidate:nth-child(2n) {
+  background-color: #113;
+  border-radius: 4px;
+}
+
+#available-candidates :is(.number, .up, .down, .remove) {
+  display: none;
+}
+
+#selected-candidates .select {
+  display: none;
+}
+
+.number, .up, .down, .remove, .select {
+  flex-grow: 0;
+}
+
+.candidate-name {
+  flex-grow: 1;
+}
+
+.number {
+  width: 24px;
+  font-weight: 800;
+}
+
+.up, .down, .remove {
+  margin: 0 4px;
+}
+
+.select {
+  transition: opacity 0.3s ease;
+}
+
+.max-reached .select {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.max-reached .select:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.candidate:first-child > .up, .candidate:last-child > .down {
+  visibility: hidden;
+}
+
+#submit-election {
+  width: 100%;
+  padding: 8px;
+  font-size: 24px;
+  margin: 16px 0;
+  font-weight: 800;
+}
+
+#submit-election.urgent {
+  animation: urgent-flash 1s cubic-bezier(0.55, 0.09, 0.68, 0.53) infinite;
+}
+
+@keyframes urgent-flash {
+  0%, 100% {}
+  50% { box-shadow: 0 0 20px 12px red; }
+}

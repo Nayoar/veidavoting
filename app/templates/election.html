@@ -1,0 +1,134 @@
+{% if mode == "election" %}
+
+{% if vote_active %}
+
+  {% if not choice %}
+    {% set choice = {"unselected": elections[-1]["candidates"] | shuffle, "selected": []} %}
+  {% endif %}
+
+  {% set Selections = "Selection" if elections[-1]["positions"] == 1 else "Selections" %}
+
+  <span class="subtitle">
+    Voting for
+    <span id="role-title">{{ elections[-1]["role"] }}</span>
+  </span>
+  
+  {% if now < elections[-1]["end"] %}
+  <div id="election-interface"
+    data-positions="{{ elections[-1]['positions'] }}">
+
+    {% if not voted %}
+      <p id="election-desc" style="display: var(--active);"><i>
+        {% if elections[-1]["positions"] == 1 %}
+          Select your preferred candidate and press "Submit"
+        {% else %}
+          Rank up to {{ elections[-1]["positions"] }} candidates and press "Submit"
+        {% endif %}
+      </i></p>
+    {% endif %}
+    <span id="election-start" style="display: none;">{{ elections[-1]['start'] }}</span>
+    <span id="election-end" style="display: none;">{{ elections[-1]['end'] }}</span>
+    <p id="election-timer">Election ends in <span></span></p>
+
+    {% if voted %}
+      <p class="list-title">Your {{ Selections }}</p>
+
+      <div id="election-submitted">
+        {% for candidate in choice %}
+          <div class="candidate">
+            <span class="number">{{ loop.index }}</span>
+            {% if candidate == "RON" %}
+              <span class="candidate-name"><i>Reopen nominations</i></span>
+            {% else %}
+              <span class="candidate-name">{{ candidate }}</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+
+      <div style="display: var(--active)">
+        <p class="list-title">Candidates</p>
+        <span id="all-selected"><i>You have selected all the candidates</i></span>
+
+        <div id="available-candidates" {% if choice["selected"] | length >= elections[-1]["positions"] %}class="max-reached"{% endif %}>
+          {% for candidate in choice["unselected"] %}
+            <div class="candidate" data-candidate="{{ candidate }}">
+              <span class="number"></span>
+              {% if candidate == "RON" %}
+                <span class="candidate-name"><i>Reopen nominations</i></span>
+              {% else %}
+                <span class="candidate-name">{{ candidate }}</span>
+              {% endif %}
+              <button class="up" onclick="moveUp(this.parentElement)">&#x25B2;</button>
+              <button class="down" onclick="moveDown(this.parentElement)">&#x25BC;</button>
+              <button class="remove" onclick="removeChoice(this.parentElement)">X</button>
+              <button class="select" onclick="selectChoice(this.parentElement)">Select</button>
+            </div>
+          {% endfor %}
+        </div>
+        <p><i>You have selected the maximum number of candidates</i></p>
+
+        <p class="list-title">Your {{ Selections }}</p>
+        <span id="none-selected"><i>Please select 
+          {{ "a" if elections[-1]["positions"] == 1 else "at least one" }} candidate</i></span>
+
+        <div id="selected-candidates">
+          {% for candidate in choice["selected"] %}
+            <div class="candidate" data-candidate="{{ candidate }}">
+              <span class="number">{{ loop.index }}</span>
+              {% if candidate == "RON" %}
+                <span class="candidate-name"><i>Reopen nominations</i></span>
+              {% else %}
+                <span class="candidate-name">{{ candidate }}</span>
+              {% endif %}
+              <button class="up" onclick="moveUp(this.parentElement)">&#x25B2;</button>
+              <button class="down" onclick="moveDown(this.parentElement)">&#x25BC;</button>
+              <button class="remove" onclick="removeChoice(this.parentElement)">X</button>
+              <button class="select" onclick="selectChoice(this.parentElement)">Select</button>
+            </div>
+          {% endfor %}
+        </div>
+
+        <button id="submit-election" onclick="submitElection(true)">Submit</button>
+
+
+        <p id="save-error"></p>
+
+      </div>
+
+      <div style="display: var(--inactive);">
+        <p class="list-title">Candidates</p>
+
+        <div id="available-candidates">
+          {% for candidate in elections[-1]["candidates"] | shuffle %}
+            <div class="candidate">
+              {% if candidate == "RON" %}
+                <span class="candidate-name"><i>Reopen nominations</i></span>
+              {% else %}
+                <span class="candidate-name">{{ candidate }}</span>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <p style="display: var(--deactivated);"><i>You are currently unable to vote</i></p>
+      </div>
+
+    {% endif %}
+
+  </div>
+  {% endif %}
+
+  <div id="election-over"
+    {% if now < elections[-1]["end"] %}
+      style="display: none;"
+    {% endif %}>
+    <br><span class="subtitle">Election has ended!</span>
+    <span><i>Results will be publicised after Veida</i></span>
+  </div>
+
+{% else %}
+  <p><i>No election currently taking place</i></p>
+{% endif %}
+
+{% endif %}

@@ -9,78 +9,110 @@
 
 {% block content %}
 
+  <h4 id="connection-lost" style="display:none;">
+    Connection regained &nbsp;
+    <button onclick="location.reload();">Reload</button>
+  </h4>
+
   <datalist id="userlist">
     {% include "userlist.html" %}
   </datalist>
 
   <div id="manage-users">
-    <h3>Users</h3>
+    <h3 class="toggler" onclick="toggleNext(this);">Users &#x25BC;</h3>
+    <div>
+      <button onclick="newUser()">New user</button>
+      <button onclick="newAdmin()">New admin</button>
+      <button onclick="newUser(prompt())">Custom user</button>
+      <button onclick="newAdmin(prompt())">Custom admin</button>
+      <div class="spacer"></div>
 
-    <button onclick="newUser()">New user</button>
-    <button onclick="newAdmin()">New admin</button>
-    <button onclick="newUser(prompt())">Custom user</button>
-    <button onclick="newAdmin(prompt())">Custom admin</button>
-    <div class="spacer"></div>
+      <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
+      <button onclick="$('#toggle-user').val('')">X</button>
+      <div class="spacer"></div>
 
-    <input id="toggle-user" onkeyup="unspace(this)" list="userlist">
-    <button onclick="$('#toggle-user').val('')">X</button>
-    <div class="spacer"></div>
+      Status:
+      <button onclick="deleteUser()">&#128465;</button>
+      <button onclick="userStatus(0)">0</button>
+      <button onclick="userStatus(1)">1</button>
+      <button onclick="userStatus(2)">2</button>
+      <button onclick="userStatus(3)">3</button>
+      <button onclick="unsuspend()">All 2->3</button>
+      &nbsp; &nbsp;
+      Admin:
+      <button onclick="adminStatus(0)">0</button>
+      <button onclick="adminStatus(1)">1</button>
+      &nbsp; &nbsp;
+      <button onclick="runScript('location.reload();')">&#x21bb;</button>
+      <button onclick="runScript(prompt())">&#9658;</button>
+      <div class="spacer"></div>
 
-    Status:
-    <button onclick="deleteUser()">&#128465;</button>
-    <button onclick="userStatus(0)">0</button>
-    <button onclick="userStatus(1)">1</button>
-    <button onclick="userStatus(2)">2</button>
-    <button onclick="userStatus(3)">3</button>
-    <button onclick="unsuspend()">All 2->3</button>
-    &nbsp; &nbsp;
-    Admin:
-    <button onclick="adminStatus(0)">0</button>
-    <button onclick="adminStatus(1)">1</button>
-    &nbsp; &nbsp;
-    <button onclick="runScript('location.reload();')">&#x21bb;</button>
-    <button onclick="runScript(prompt())">&#9658;</button>
-    <div class="spacer"></div>
-
-    <span id="confirm-toggle"></span>
+      <span id="confirm-toggle"></span>
+    </div>
   </div>
 
   <div>
-    <h3>Message</h3>
-    <textarea id="edit-message" spellcheck="false">{{ message }}</textarea>
-    <button onclick="setMessage('none')">Set as message</button>
-    <button onclick="setMessage('motion')">Set as motion</button>
-    <button onclick="setMessage('constitutional')">Set as constitutional amendment</button>
-    <span id="message-confirm"></span>
+    <h3 class="toggler" onclick="toggleNext(this);">Message &#x25BC;</h3>
+    <div>
+      <textarea id="edit-message" spellcheck="false">{{ message }}</textarea>
+      <button onclick="setMessage('none')">Set as message</button>
+      <button onclick="setMessage('motion')">Set as motion</button>
+      <button onclick="setMessage('constitutional')">Set as constitutional amendment</button>
+      <span id="message-confirm"></span>
+    </div>
   </div>
 
   <div>
-    <h3>Voting</h3>
-    <div id="vote-presets">
-      <button id="suspend-e4" onclick="votePreset(this)">Suspend E4</button>
-      <button id="ratify-steering" onclick="votePreset(this)">Ratify steering</button>
-      <button id="ratify-chair" onclick="votePreset(this)">Ratify chair</button>
-      <button id="move-hanhallah" onclick="votePreset(this)">Move to Hanhallah</button>
-      <button id="amendment" onclick="votePreset(this)">Amendment</button>
-      <button id="parts" onclick="votePreset(this)">Vote in parts</button>
-      <button id="move-to-vote" onclick="votePreset(this)">Move to vote</button>
-      <button id="vote-on-motion" onclick="votePreset(this)">Vote on motion</button>
-    </div><br>
-    Vote duration: <input type="number" id="duration" value=20><br><br>
-    Custom vote: <input id="custom-vote"><button onclick="voteCustom()">Go</button><br><br>
+    <h3 class="toggler" onclick="toggleNext(this);">Voting &#x25BC;</h3>
+    <div>
+      <div id="vote-presets">
+        <button id="suspend-e4" onclick="votePreset(this)">Suspend E4</button>
+        <button id="ratify-steering" onclick="votePreset(this)">Ratify steering</button>
+        <button id="ratify-chair" onclick="votePreset(this)">Ratify chair</button>
+        <button id="move-hanhallah" onclick="votePreset(this)">Move to Hanhallah</button>
+        <button id="amendment" onclick="votePreset(this)">Amendment</button>
+        <button id="parts" onclick="votePreset(this)">Vote in parts</button>
+        <button id="move-to-vote" onclick="votePreset(this)">Move to vote</button>
+        <button id="vote-on-motion" onclick="votePreset(this)">Vote on motion</button>
+      </div><br>
+      Vote duration: <input type="number" id="duration" value=20><br><br>
+      Custom vote: <input id="custom-vote"><button onclick="voteCustom()">Go</button><br><br>
 
-    <button onclick="extendVote()">Extend vote</button>
-    <button onclick="endVote(true)">End vote</button>
-    <button onclick="endVote(false)">Cancel vote</button>
-    <button onclick="endVote(false)">Clear results</button>
+      <button onclick="extendVote()">Extend vote</button>
+      <button onclick="endVote(true)">End vote</button>
+      <button onclick="endVote(false)">Cancel vote</button>
+      <button onclick="endVote(false)">Clear results</button>
 
-    <br><span id="vote-confirm"></span>
-
-    <p id="username"><i>{{ user }}</i></p>
-    <div id="active-user">{% include "active_user.html" %}</div>
+      <br><span id="vote-confirm"></span>
+    </div>
   </div>
 
-  <div id="voters">
+  <div>
+    <h3 class="toggler" onclick="toggleNext(this);">Elections &#x25BC;</h3>
+    <div id="election-config">
+      <textarea id="election-candidates" spellcheck="false"></textarea>
+      <div>
+        Role: <input id="election-role"><br>
+        Positions: <input type="number" id="election-positions" value=1>
+        <button onclick="$(this).prev().val(1)">1</button>
+        <button onclick="$(this).prev().prev().val(6)">6</button><br>
+        Duration: <input type="number" id="election-duration" value=30><br>
+        <button onclick="startElection()">Start</button>
+        <button onclick="extendElection()">Extend</button>
+        <button onclick="endElection(true)">End</button>
+        <button onclick="endElection(false)">Cancel</button>
+        <button onclick="clearElection()">Clear</button>
+        <br><span id="election-confirm"></span>
+      </div>
+    </div>
+  </div>
+
+    <div>
+      <p id="username"><i>{{ user }}</i></p>
+      <div id="active-user">{% include "active_user.html" %}</div>
+    </div>
+
+  {# <div id="voters">
     <div id="yes-voters">
 
     </div>
@@ -90,9 +122,9 @@
     <div id="no-voters">
 
     </div>
-  </div>
+  </div> #}
 
-  <button onclick="logout()">Log out</button>
+  <button onclick="adminLogout()">Log out</button>
   <br><br><br>
 
 {% endblock %}

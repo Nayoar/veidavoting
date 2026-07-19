@@ -2,6 +2,12 @@ import threading
 import time
 from .. import *
 
+def push_vote():
+  turbo.push([
+    turbo.update(render_template("vote.html",), "live-vote"),
+    turbo.update("", "live-election")
+  ])
+
 
 def show_results():
   while True:
@@ -11,13 +17,15 @@ def show_results():
     if now() > DB.votes[-1]["end"] + 2000:
       break
   with app.app_context():
-    turbo.push(turbo.update(
-      render_template("vote.html",), "live-vote"))
+    push_vote()    
 
 
 @app.route("/admin/start-vote", methods=["POST"])
 @superadmin
 def start_vote():
+
+  if DB.mode == "election":
+    abort(400)
 
   data = request.get_json()
 
@@ -33,8 +41,7 @@ def start_vote():
     "votes": {}
   })
   DB.vote_active = True
-  turbo.push(turbo.update(
-    render_template("vote.html",), "live-vote"))
+  push_vote()
   threading.Thread(target=show_results).start()
   return "ok"
 
@@ -43,13 +50,12 @@ def start_vote():
 @superadmin
 def extend_vote():
 
-  if not DB.vote_active:
+  if DB.mode == "election" or not DB.vote_active:
     abort(400)
 
   data = request.get_json()
   DB.votes[-1]["end"] += data * 1000
-  turbo.push(turbo.update(
-    render_template("vote.html",), "live-vote"))
+  push_vote()
   return "ok"
 
 
@@ -57,14 +63,13 @@ def extend_vote():
 @superadmin
 def end_vote():
 
-  if not DB.vote_active:
+  if DB.mode == "election" or not DB.vote_active:
     abort(400)
 
   end = now()
   if DB.votes[-1]["end"] > end:
     DB.votes[-1]["end"] = end
-  turbo.push(turbo.update(
-    render_template("vote.html",), "live-vote"))
+  push_vote()
   
   return "ok"
 
@@ -73,14 +78,27 @@ def end_vote():
 @superadmin
 def cancel_vote():
 
-  if not DB.vote_active:
+  if DB.mode == "election" or not DB.vote_active:
     abort(400)
 
   end = now()
   if DB.votes[-1]["end"] > end:
     DB.votes[-1]["end"] = end
   DB.vote_active = False
-  turbo.push(turbo.update(
-    render_template("vote.html",), "live-vote"))
+  push_vote()
+  
+  return "ok"
+
+
+@app.route("/admin/clear-election", methods=["POST"])
+@superadmin
+def clear_election():
+
+  if not (DB.mode == "election" and DB.elections[-1]["end"] <= now()):
+    abort(400)
+
+  DB.mode = "nothing"
+  DB.vote_active = False
+  push_vote()
   
   return "ok"

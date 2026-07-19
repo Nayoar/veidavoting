@@ -43,6 +43,15 @@ def index():
   return render_template("index.html", user=None)
 
 
+@app.route("/logout")
+def logout():
+  user = get_user()
+  if vote_status(user) != 0:
+    abort(403)
+  session.pop("user")
+  return "ok"
+
+
 @app.route("/display")
 def display():
   return render_template("index.html", display=True)
