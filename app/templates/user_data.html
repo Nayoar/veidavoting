@@ -1,0 +1,32 @@
+<span id="user-data"
+  data-user = "{{ user }}"
+  data-status = "{{ users.get(user, {'status': 0})['status'] }}"
+  data-voted = "{{ '1' if user in votes[-1]['votes'] else '0' }}"
+  data-choice = "{{ votes[-1]['votes'].get(user, 'none') }}"
+  data-elected = "{{ '1' if user in elections[-1]['votes'] else '0' }}"
+>
+  {% if user in elections[-1]["votes"] %}
+    {% for candidate in elections[-1]["votes"][user] %}
+      <span class="selected-candidate"
+        data-candidate="{{ candidate }}"></span>
+    {% endfor %}
+  {% else %}
+    {% with provisional=elections[-1]["provisional"]
+      .get(user, {
+        "unselected": elections[-1]["candidates"] | shuffle,
+        "selected": []
+      })
+    %}
+      {% for candidate in provisional["unselected"] %}
+        <span class="unselected-candidate"
+          data-candidate="{{ candidate }}"></span>
+      {% endfor %}
+      {% for candidate in provisional["selected"] %}
+        <span class="selected-candidate"
+          data-candidate="{{ candidate }}"></span>
+      {% endfor %}
+    {% endwith %}
+  {% endif %}
+
+  <script>injectData();</script>
+</span>

@@ -18,7 +18,7 @@
     {% include "userlist.html" %}
   </datalist>
 
-  <div id="manage-users">
+  <div id="manage-users" class="superadmin">
     <h3 class="toggler" onclick="toggleNext(this);">Users &#x25BC;</h3>
     <div>
       <button onclick="newUser()">New user</button>
@@ -99,8 +99,8 @@
         Duration: <input type="number" id="election-duration" value=30><br>
         <button onclick="startElection()">Start</button>
         <button onclick="extendElection()">Extend</button>
-        <button onclick="endElection(true)">End</button>
-        <button onclick="endElection(false)">Cancel</button>
+        <button onclick="endElection()">End</button>
+        <button onclick="clearElection()">Cancel</button>
         <button onclick="clearElection()">Clear</button>
         <br><span id="election-confirm"></span>
       </div>
@@ -108,8 +108,9 @@
   </div>
 
     <div>
-      <p id="username"><i>{{ user }}</i></p>
-      <div id="active-user">{% include "active_user.html" %}</div>
+      <p id="username" class="superadmin"><i>{{ user }}</i></p>
+      {% include "user_data.html" %}
+      <div id="live-vote"></div>
     </div>
 
   {# <div id="voters">

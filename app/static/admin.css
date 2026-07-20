@@ -24,11 +24,11 @@
   background-color: #224;
 }
 
-#manage-users {
+#manage-users.superadmin {
   position: relative;
 }
 
-#confirm-toggle {
+.superadmin #confirm-toggle {
   position: absolute;
   right: 0;
 }
@@ -104,7 +104,7 @@
   margin: 2px;
 }
 
-#username {
+#username.superadmin {
   border-top: 6px double white;
   margin-top: 48px;
   padding-top: 24px;

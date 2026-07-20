@@ -2,11 +2,11 @@ import threading
 import time
 from .. import *
 
-def push_vote():
-  turbo.push([
-    turbo.update(render_template("vote.html",), "live-vote"),
-    turbo.update("", "live-election")
-  ])
+def push_vote(new=False):
+  turbo.push(turbo.update(
+    render_template("vote.html", new=new),
+    "live-vote"
+  ))
 
 
 def show_results():
@@ -41,7 +41,7 @@ def start_vote():
     "votes": {}
   })
   DB.vote_active = True
-  push_vote()
+  push_vote(True)
   threading.Thread(target=show_results).start()
   return "ok"
 
@@ -94,9 +94,12 @@ def cancel_vote():
 @superadmin
 def clear_election():
 
-  if not (DB.mode == "election" and DB.elections[-1]["end"] <= now()):
+  if not (DB.mode == "election" and DB.vote_active):
     abort(400)
 
+  end = now()
+  if DB.elections[-1]["end"] > end:
+    DB.elections[-1]["end"] = end
   DB.mode = "nothing"
   DB.vote_active = False
   push_vote()

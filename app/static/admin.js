@@ -173,7 +173,7 @@ const startElection = () => {
       body: JSON.stringify({
         role: $("#election-role").val(),
         positions: parseInt($("#election-positions").val()),
-        candidates: $("#election-candidates").val().split(/[\r\n]+/g),
+        candidates: $("#election-candidates").val().trim().split(/[\r\n]+/g),
         duration: parseInt($("#election-duration").val())
       })
     }
@@ -204,8 +204,8 @@ const extendElection = () => {
   })
 }
 
-const endElection = a => {
-  fetch(a ? "/admin/end-election" : "/admin/cancel-election",
+const endElection = () => {
+  fetch("/admin/end-election",
     {
       method: "POST",
       headers: {

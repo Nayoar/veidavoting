@@ -57,9 +57,9 @@ def user_status():
   DB.users[user]["status"] = status
   if turbo.can_push(to=user):
     turbo.push(
-      turbo.update(
-        render_template("active_user.html", user=user),
-        "active-user"
+      turbo.replace(
+        render_template("user_data.html", user=user),
+        "user-data"
       ),
       to=user
     )
@@ -75,9 +75,9 @@ def unsuspend():
       DB.users[user]["status"] = 3
       if turbo.can_push(to=user):
         turbo.push(
-          turbo.update(
-            render_template("active_user.html", user=user),
-            "active-user"
+          turbo.replace(
+            render_template("user_data.html", user=user),
+            "user-data"
           ),
           to=user
         )

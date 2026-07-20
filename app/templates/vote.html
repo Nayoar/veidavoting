@@ -1,4 +1,4 @@
-{% if mode != "election" %}
+<span id="mode" data-mode="vote"></span>
 
 {% if vote_active %}
 
@@ -15,10 +15,8 @@
       --duration: {{ (votes[-1]['end'] - now) / 1000 }}s;
     "><div id="seconds"></div></div>
 
-    <div style="display: var(--active);">
-      <div id="vote-buttons" 
-        {% if voted %} style="display: none;" {% endif %}
-      >
+    <div class="not-yet-voted">
+      <div id="vote-buttons">
         <div id="yesno">
           <div class="vote-button" id="vote-yes" onclick="vote(this)">Yes</div>
           <div class="vote-button" id="vote-no" onclick="vote(this)">No</div>
@@ -26,35 +24,22 @@
         <div class="vote-button" id="abstain" onclick="vote(this)">Abstain</div>
       </div>
       
-      <button id="submit-vote" onclick="submitVote()"
-        {% if voted %} style="display: none;" {% endif %}
-      >Submit vote</button>
+      <button id="submit-vote" onclick="submitVote()">Submit vote</button>
 
-      <p id="vote-warning"
-        {% if voted %} style="display: none;" {% endif %}
-      ><i>You must press "Submit vote" before the timer ends. If you do not submit your vote, it will not be counted.</i></p>
-
-      <p id="vote-submitted"
-        {% if voted %} style="display: block;"
-        {% else %} style="display: none;" {% endif %}
-      >
-        You have voted <span id="vote-choice">{{ choice }}</span>
-      </p>
+      <p id="vote-warning"><i>You must press "Submit vote" before the timer ends. If you do not submit your vote, it will not be counted.</i></p>
     </div>
 
-    <div style="display: var(--inactive);">
-      <p><i>You are currently unable to vote</i></p>
-    </div>
-    <div style="display: var(--suspended);">
-      <p><i>You will be able to vote at the start of the next motion</i></p>
-    </div>
+    <p id="vote-submitted">
+      You have voted <span id="vote-choice"></span>
+    </p>
 
-    <p id="error" style="display: none;">Error :(</p>
+    <p id="error">Error :(</p>
   </div>
 
-  <div id="vote-over" style="display: none;">
-    <span class="subtitle">Vote has ended!</span>
-  </div>
+  <span class="subtitle" id="vote-over-msg">Vote has ended!</span>
+
+  <p id="status-1"><i>You are currently unable to vote</i></p>
+  <p id="status-2"><i>You will be able to vote at the start of the next motion</i></p>
 
   {% else %}
 
@@ -108,4 +93,8 @@
   <p><i>No vote currently taking place</i></p>
 {% endif %}
 
-{% endif %}
+
+{% if new %}<script>
+  $("#user-data").attr("data-voted", "0");
+</script>{% endif %}
+<script>injectData();</script>

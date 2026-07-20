@@ -8,7 +8,7 @@
   color: #666;
 }
 
-#active-user {
+#live-vote {
   margin: 20px;
 }
 
@@ -19,6 +19,10 @@ span#message, #vote {
 
 #secret-code {
   width: 120px;
+}
+
+#vote-submitted, #status-1, #status-2, #error, #vote-over-msg, #voted, #no-vote, #status-non3, #candidate-template {
+  display: none;
 }
 
 @property --a {
@@ -191,7 +195,7 @@ span#message, #vote {
 
 
 
-#live-election {
+#live-vote:has([data-mode="election"]) {
   text-align: left;
   padding: 16px;
 }
@@ -270,7 +274,7 @@ span#message, #vote {
 }
 
 .select {
-  transition: opacity 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .max-reached .select {
@@ -302,4 +306,11 @@ span#message, #vote {
 @keyframes urgent-flash {
   0%, 100% {}
   50% { box-shadow: 0 0 20px 12px red; }
+}
+
+#selected-candidates:not(:has(.candidate)) + #submit-election:is(*, :hover, :active) {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }

@@ -3,7 +3,7 @@ const unspace = e => $(e).val($(e).val().replace(" ", "-"))
 $("#secret-code").on("keyup", e => {
   if (e.key === "Enter" || e.keyCode === 13) login();
   else unspace($("#secret-code"));
-})
+});
 
 const login = () => {
   let username = $("#secret-code").val();
@@ -50,10 +50,10 @@ const submitVote = () => {
   )
   .then(r => {
     if (r.status == 200) {
-      $("#vote-buttons, #submit-vote, #vote-warning").hide();
-      $("#vote-choice").html(choice);
-      // $("#live-vote").css(`--${choice}`, "inline");
-      $("#vote-submitted").show();
+      $("#user-data")
+        .attr("data-voted", "1")
+        .attr("data-choice", choice);
+      injectData();
     } else {
       $("#error").show();
     }
@@ -141,6 +141,22 @@ const submitElection = submit => {
     .map(function(){
       return $(this).attr("data-candidate")
     }).toArray();
+
+  $("#user-data :is(.selected-candidate, .unselected-candidate)").remove();
+  unselected.forEach(cand => {
+    $("<span></span>")
+      .addClass("unselected-candidate")
+      .attr("data-candidate", cand)
+      .appendTo("#user-data");
+  });
+  selected.forEach(cand => {
+    $("<span></span>")
+      .addClass("selected-candidate")
+      .attr("data-candidate", cand)
+      .appendTo("#user-data");
+  });
+
+  if (submit && selected.length == 0) return;
   fetch("/submit-election",
     {
       method: "POST",
@@ -172,7 +188,7 @@ setInterval(() => {
     $("#seconds").html(Math.floor((end - now) / 1000));
   } else {
     $("#voting-interface").hide();
-    $("#vote-over").show()
+    $("#vote-over-msg").show()
   }
 }, 200);
 

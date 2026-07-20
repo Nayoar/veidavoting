@@ -12,11 +12,11 @@ def shuffle_candidates(candidates):
 
 app.jinja_env.filters["shuffle"] = shuffle_candidates
 
-def push_election():
-  turbo.push([
-    turbo.update(render_template("election.html"), "live-election"),
-    turbo.update("", "live-vote")
-  ])
+def push_election(new=False):
+  turbo.push(turbo.update(
+    render_template("election.html", new=new),
+    "live-vote"
+  ))
 
 @app.route("/submit-election", methods=["POST"])
 def save_election_choice():
@@ -78,7 +78,7 @@ def start_election():
     "votes": {}
   })
   DB.vote_active = True
-  push_election()
+  push_election(True)
   return "ok"
 
 
@@ -91,7 +91,7 @@ def extend_election():
 
   data = request.get_json()
   DB.elections[-1]["end"] += data * 1000
-  turbo.push(turbo.update(str(DB.elections[-1]["end"]), "election-end"))
+  push_election()
   return "ok"
 
 
@@ -106,21 +106,4 @@ def end_election():
   if DB.elections[-1]["end"] > end:
     DB.elections[-1]["end"] = end
   push_election()
-  
-  return "ok"
-
-
-@app.route("/admin/cancel-election", methods=["POST"])
-@superadmin
-def cancel_election():
-
-  if not (DB.mode == "election" and DB.vote_active):
-    abort(400)
-
-  end = now()
-  if DB.elections[-1]["end"] > end:
-    DB.elections[-1]["end"] = end
-  DB.vote_active = False
-  push_election()
-  
   return "ok"

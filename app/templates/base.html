@@ -8,7 +8,16 @@
     <link rel="icon" type="image/x-icon" href="https://www.bauk.org/wp-content/uploads/2023/03/cropped-SEMEL-TRANSPARENT-Sq-32x32.png">
     {% block head %}{% endblock %}
 
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+      crossorigin="anonymous"></script>
+
     {{ turbo() }}
+    <script>const ADMIN = {{"true" if user and users[user]["admin"] == 2 else "false"}};</script>
+    <script src="/static/wsfix.js"></script>
+    
+    <script src="/static/inject_data.js"></script>
     
   </head>
   <body>
@@ -21,12 +30,6 @@
       {% block content %}{% endblock %}
     </main>
 
-    <script
-      src="https://code.jquery.com/jquery-4.0.0.min.js"
-      integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
-      crossorigin="anonymous"></script>
-    <script>const ADMIN = {{"true" if user and users[user]["admin"] == 2 else "false"}};</script>
-    <script src="/static/wsfix.js"></script>
     {% block scripts %}{% endblock %}
 
     <div id="script"></div>

@@ -33,7 +33,14 @@
   {% endif %}
 {% endif %}
 
-<div id="active-user">{% include "active_user.html" %}</div>
+{% include "user_data.html" %}
+<div id="live-vote">
+  {% if mode == "election" %}
+    {% include "election.html" %}
+  {% else %}
+    {% include "vote.html" %}
+  {% endif %}
+</div>
 
 {% endblock %}
 
