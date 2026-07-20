@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <title>{% block title %}Veida 5786{% endblock %}</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
-    <link rel="icon" type="image/x-icon" href="https://www.bauk.org/wp-content/uploads/2023/03/cropped-SEMEL-TRANSPARENT-Sq-32x32.png">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     {% block head %}{% endblock %}
 
     <script
@@ -23,7 +23,9 @@
   <body>
 
     <header>{% block header %}
+      <img src="/static/semel.png">
       <span>VEIDA 5786</span>
+      <span id="bsd">בס"ד</span>
     {% endblock %}</header>
 
     <main>
